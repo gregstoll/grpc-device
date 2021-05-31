@@ -10,6 +10,7 @@ namespace_prefix = config["namespace_component"] + "_grpc::"
 module_name = config["module_name"]
 if len(config["custom_types"]) > 0:
   custom_types = config["custom_types"]
+resource_handle_type = config.get("resource_handle_type", "ViSession")
 %>\
 <%namespace name="mako_helper" file="/service_helpers.mako"/>\
 
@@ -82,7 +83,7 @@ namespace ${config["namespace_component"]}_grpc {
 %   if common_helpers.has_unsupported_parameter(function_data):
       return ::grpc::Status(::grpc::UNIMPLEMENTED, "TODO: This server handler has not been implemented.");
 %   elif common_helpers.is_init_method(function_data):
-${mako_helper.define_init_method_body(function_name=function_name, function_data=function_data, parameters=parameters)}
+${mako_helper.define_init_method_body(function_name=function_name, function_data=function_data, parameters=parameters, resource_handle_type=resource_handle_type)}
 %   elif common_helpers.has_ivi_dance_param(parameters):
 ${mako_helper.define_ivi_dance_method_body(function_name=function_name, function_data=function_data, parameters=parameters)}
 %   else:

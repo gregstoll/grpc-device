@@ -116,7 +116,7 @@ public:
   ::grpc::Status UnlockSession(::grpc::ServerContext* context, const UnlockSessionRequest* request, UnlockSessionResponse* response) override;
 private:
   NiScopeLibraryInterface* library_;
-  nidevice_grpc::SessionRepository* session_repository_;
+  nidevice_grpc::ResourceRepository<ViSession> session_repository_;
   void Copy(const niScope_wfmInfo& input, niscope_grpc::WaveformInfo* output);
   void Copy(const std::vector<niScope_wfmInfo>& input, google::protobuf::RepeatedPtrField<niscope_grpc::WaveformInfo>* output);
   void Copy(const niScope_coefficientInfo& input, niscope_grpc::CoefficientInfo* output);

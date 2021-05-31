@@ -14,6 +14,8 @@ include_guard_name = service_helpers.get_include_guard_name(config, "_SERVICE_H"
 namespace_prefix = config["namespace_component"] + "_grpc::"
 if len(config["custom_types"]) > 0:
   custom_types = config["custom_types"]
+resource_handle_type = config.get("resource_handle_type", "ViSession")
+session_repository_type = f"nidevice_grpc::ResourceRepository<{resource_handle_type}>"
 %>\
 
 //---------------------------------------------------------------------
@@ -50,7 +52,7 @@ public:
 % endfor
 private:
   ${service_class_prefix}LibraryInterface* library_;
-  nidevice_grpc::SessionRepository* session_repository_;
+  ${session_repository_type} session_repository_;
 % if common_helpers.has_viboolean_array_param(functions):
   void Copy(const std::vector<ViBoolean>& input, google::protobuf::RepeatedField<bool>* output);
 % endif

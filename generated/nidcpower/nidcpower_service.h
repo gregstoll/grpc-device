@@ -176,7 +176,7 @@ public:
   ::grpc::Status WaitForEvent(::grpc::ServerContext* context, const WaitForEventRequest* request, WaitForEventResponse* response) override;
 private:
   NiDCPowerLibraryInterface* library_;
-  nidevice_grpc::SessionRepository* session_repository_;
+  nidevice_grpc::ResourceRepository<ViSession> session_repository_;
   void Copy(const std::vector<ViBoolean>& input, google::protobuf::RepeatedField<bool>* output);
 };
 

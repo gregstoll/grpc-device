@@ -20,6 +20,8 @@
   #include "linux/daemonize.h"
   #include "linux/syslog_logging.h"
 #endif
+#include <nidaqmx/nidaqmx_service.h>
+#include <nidaqmx/nidaqmx_library.h>
 
 struct ServerConfiguration
 {
@@ -98,6 +100,10 @@ static void RunServer(const ServerConfiguration& config)
   nidcpower_grpc::NiDCPowerLibrary nidcpower_library;
   nidcpower_grpc::NiDCPowerService nidcpower_service(&nidcpower_library, &session_repository);
   builder.RegisterService(&nidcpower_service);
+
+  nidaqmx_grpc::NiDAQmxLibrary nidaqmx_library;
+  nidaqmx_grpc::NiDAQmxService nidaqmx_service(&nidaqmx_library, &session_repository);
+  builder.RegisterService(&nidaqmx_service);
 
   // Assemble the server.
   {

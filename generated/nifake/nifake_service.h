@@ -71,7 +71,7 @@ public:
   ::grpc::Status CloseExtCal(::grpc::ServerContext* context, const CloseExtCalRequest* request, CloseExtCalResponse* response) override;
 private:
   NiFakeLibraryInterface* library_;
-  nidevice_grpc::SessionRepository* session_repository_;
+  nidevice_grpc::ResourceRepository<ViSession> session_repository_;
   void Copy(const std::vector<ViBoolean>& input, google::protobuf::RepeatedField<bool>* output);
   void Copy(const CustomStruct& input, nifake_grpc::FakeCustomStruct* output);
   void Copy(const std::vector<CustomStruct>& input, google::protobuf::RepeatedPtrField<nifake_grpc::FakeCustomStruct>* output);

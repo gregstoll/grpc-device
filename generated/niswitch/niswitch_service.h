@@ -88,7 +88,7 @@ public:
   ::grpc::Status WaitForScanComplete(::grpc::ServerContext* context, const WaitForScanCompleteRequest* request, WaitForScanCompleteResponse* response) override;
 private:
   NiSwitchLibraryInterface* library_;
-  nidevice_grpc::SessionRepository* session_repository_;
+  nidevice_grpc::ResourceRepository<ViSession> session_repository_;
 };
 
 } // namespace niswitch_grpc

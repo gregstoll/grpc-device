@@ -32,7 +32,7 @@ static void CheckStatus(int status)
     }
     try {
       auto vi_grpc_session = request->vi();
-      ViSession vi = session_repository_->access_session(vi_grpc_session.id(), vi_grpc_session.name());
+      ViSession vi = session_repository_.access_session(vi_grpc_session.id(), vi_grpc_session.name());
       ViConstString channel_name = request->channel_name().c_str();
 
       ViUInt32 number_of_channels;

@@ -130,7 +130,7 @@ public:
   ::grpc::Status UnlockSession(::grpc::ServerContext* context, const UnlockSessionRequest* request, UnlockSessionResponse* response) override;
 private:
   NiDmmLibraryInterface* library_;
-  nidevice_grpc::SessionRepository* session_repository_;
+  nidevice_grpc::ResourceRepository<ViSession> session_repository_;
 };
 
 } // namespace nidmm_grpc

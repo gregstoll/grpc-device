@@ -96,7 +96,7 @@ public:
   ::grpc::Status CalAdjustDDSInitialPhase(::grpc::ServerContext* context, const CalAdjustDDSInitialPhaseRequest* request, CalAdjustDDSInitialPhaseResponse* response) override;
 private:
   NiSyncLibraryInterface* library_;
-  nidevice_grpc::SessionRepository* session_repository_;
+  nidevice_grpc::ResourceRepository<ViSession> session_repository_;
 };
 
 } // namespace nisync_grpc
