@@ -29,6 +29,28 @@ functions = {
         ],
         'returns': 'int32',
     },
+    'StartTask': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            }
+        ],
+        'returns': 'int32',
+    },
+    'StopTask': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            }
+        ],
+        'returns': 'int32',
+    },
     #int32 __CFUNC     DAQmxCreateAIVoltageChan       
     # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[], 
     # int32 terminalConfig, float64 minVal, float64 maxVal, int32 units, 
@@ -264,6 +286,63 @@ functions = {
             },
         ],
         'returns': 'int32'
+    },
+# int32 __CFUNC     DAQmxReadAnalogF64             
+# (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, 
+# float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    'ReadAnalogF64': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'fillMode',
+                'type': 'int32',
+            },
+            {
+                'direction': 'out',
+                'name': 'readArray',
+                'type': 'float64[]',
+                'grpc_type': 'repeated double',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'arraySizeInSamps'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'arraySizeInSamps',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChan',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+
+            }
+        ],
+        'returns': 'int32',
     },
     'CfgSampClkTiming': {
         'parameters': [

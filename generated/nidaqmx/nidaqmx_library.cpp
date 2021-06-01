@@ -23,6 +23,8 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   }
   function_pointers_.CreateTask = reinterpret_cast<CreateTaskPtr>(shared_library_.get_function_pointer("DAQmxCreateTask"));
   function_pointers_.ClearTask = reinterpret_cast<ClearTaskPtr>(shared_library_.get_function_pointer("DAQmxClearTask"));
+  function_pointers_.StartTask = reinterpret_cast<StartTaskPtr>(shared_library_.get_function_pointer("DAQmxStartTask"));
+  function_pointers_.StopTask = reinterpret_cast<StopTaskPtr>(shared_library_.get_function_pointer("DAQmxStopTask"));
   function_pointers_.CreateAIVoltageChan = reinterpret_cast<CreateAIVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAIVoltageChan"));
   function_pointers_.GetChanAttributeU32 = reinterpret_cast<GetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
   function_pointers_.SetChanAttributeU32 = reinterpret_cast<SetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
@@ -30,6 +32,7 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.SetChanAttributeF64 = reinterpret_cast<SetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
   function_pointers_.GetChanAttributeStr = reinterpret_cast<GetChanAttributeStrPtr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
   function_pointers_.SetChanAttributeStr = reinterpret_cast<SetChanAttributeStrPtr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
+  function_pointers_.ReadAnalogF64 = reinterpret_cast<ReadAnalogF64Ptr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.CfgSampClkTiming = reinterpret_cast<CfgSampClkTimingPtr>(shared_library_.get_function_pointer("DAQmxCfgSampClkTiming"));
 }
 
@@ -67,6 +70,22 @@ int32 NiDAQmxLibrary::ClearTask(TaskHandle task)
   return function_pointers_.ClearTask(task);
 #endif
   return function_pointers_.ClearTask(task);
+}
+
+int32 NiDAQmxLibrary::StartTask(TaskHandle task)
+{
+  if (!function_pointers_.StartTask) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxStartTask.");
+  }
+  return function_pointers_.StartTask(task);
+}
+
+int32 NiDAQmxLibrary::StopTask(TaskHandle task)
+{
+  if (!function_pointers_.StopTask) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxStopTask.");
+  }
+  return function_pointers_.StopTask(task);
 }
 
 int32 NiDAQmxLibrary::CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name)
@@ -123,6 +142,14 @@ int32 NiDAQmxLibrary::SetChanAttributeStr(TaskHandle task, const char* channel, 
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxSetChanAttribute.");
   }
   return function_pointers_.SetChanAttributeStr(task, channel, attribute, value);
+}
+
+int32 NiDAQmxLibrary::ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved)
+{
+  if (!function_pointers_.ReadAnalogF64) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadAnalogF64.");
+  }
+  return function_pointers_.ReadAnalogF64(task, numSampsPerChan, timeout, fillMode, readArray, arraySizeInSamps, sampsPerChan, reserved);
 }
 
 int32 NiDAQmxLibrary::CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan)

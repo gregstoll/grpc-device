@@ -30,7 +30,7 @@ class SessionRepository {
   bool is_reserved_by_client(const std::string& reservation_id, const std::string& client_id);
   bool unreserve(const std::string& reservation_id, const std::string& client_id);
   bool reset_server();
-  uint32_t next_id() { return _next_id++; }
+  uint32_t next_id() { return ++_next_id; }
 
  private:
   struct ReservationInfo {

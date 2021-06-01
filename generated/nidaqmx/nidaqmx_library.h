@@ -20,6 +20,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   ::grpc::Status check_function_exists(std::string functionName);
   int32 CreateTask(const char* taskName, TaskHandle* task);
   int32 ClearTask(TaskHandle task);
+  int32 StartTask(TaskHandle task);
+  int32 StopTask(TaskHandle task);
   int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   int32 GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value);
   int32 SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
@@ -27,11 +29,14 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 SetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double value);
   int32 GetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
   int32 SetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, const char* value);
+  int32 ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   int32 CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
  private:
   using CreateTaskPtr = int32 (*)(const char* taskName, TaskHandle* task);
   using ClearTaskPtr = int32 (*)(TaskHandle task);
+  using StartTaskPtr = int32 (*)(TaskHandle task);
+  using StopTaskPtr = int32 (*)(TaskHandle task);
   using CreateAIVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   using GetChanAttributeU32Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, uInt32* value);
   using SetChanAttributeU32Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
@@ -39,11 +44,14 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using SetChanAttributeF64Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, double value);
   using GetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
   using SetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, const char* value);
+  using ReadAnalogF64Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   using CfgSampClkTimingPtr = int32 (*)(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
   typedef struct FunctionPointers {
     CreateTaskPtr CreateTask;
     ClearTaskPtr ClearTask;
+    StartTaskPtr StartTask;
+    StopTaskPtr StopTask;
     CreateAIVoltageChanPtr CreateAIVoltageChan;
     GetChanAttributeU32Ptr GetChanAttributeU32;
     SetChanAttributeU32Ptr SetChanAttributeU32;
@@ -51,6 +59,7 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     SetChanAttributeF64Ptr SetChanAttributeF64;
     GetChanAttributeStrPtr GetChanAttributeStr;
     SetChanAttributeStrPtr SetChanAttributeStr;
+    ReadAnalogF64Ptr ReadAnalogF64;
     CfgSampClkTimingPtr CfgSampClkTiming;
   } FunctionLoadStatus;
 
