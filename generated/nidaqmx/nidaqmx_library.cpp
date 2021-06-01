@@ -34,6 +34,7 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.SetChanAttributeStr = reinterpret_cast<SetChanAttributeStrPtr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
   function_pointers_.ReadAnalogF64 = reinterpret_cast<ReadAnalogF64Ptr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.ReadAnalogF64StreamCodegen = reinterpret_cast<ReadAnalogF64StreamCodegenPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
+  function_pointers_.ReadAnalogF64StreamCustom = reinterpret_cast<ReadAnalogF64StreamCustomPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.CfgSampClkTiming = reinterpret_cast<CfgSampClkTimingPtr>(shared_library_.get_function_pointer("DAQmxCfgSampClkTiming"));
 }
 
@@ -159,6 +160,14 @@ int32 NiDAQmxLibrary::ReadAnalogF64StreamCodegen(TaskHandle task, int32 numSamps
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadAnalogF64.");
   }
   return function_pointers_.ReadAnalogF64StreamCodegen(task, numSampsPerChan, timeout, fillMode, readArray, arraySizeInSamps, sampsPerChan, reserved);
+}
+
+int32 NiDAQmxLibrary::ReadAnalogF64StreamCustom(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved)
+{
+  if (!function_pointers_.ReadAnalogF64StreamCustom) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadAnalogF64.");
+  }
+  return function_pointers_.ReadAnalogF64StreamCustom(task, numSampsPerChan, timeout, fillMode, readArray, arraySizeInSamps, sampsPerChan, reserved);
 }
 
 int32 NiDAQmxLibrary::CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan)

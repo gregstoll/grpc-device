@@ -399,6 +399,63 @@ functions = {
         ],
         'returns': 'int32',
     },
+    'ReadAnalogF64StreamCustom': {
+        'cname' : 'DAQmxReadAnalogF64',
+        'codegen_method': 'CustomCode',
+        'stream': True,
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'fillMode',
+                'type': 'int32',
+            },
+            {
+                'direction': 'out',
+                'name': 'readArray',
+                'type': 'float64[]',
+                'grpc_type': 'repeated double',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'arraySizeInSamps'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'arraySizeInSamps',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChan',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+
+            }
+        ],
+        'returns': 'int32',
+    },
     'CfgSampClkTiming': {
         'parameters': [
             {

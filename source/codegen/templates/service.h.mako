@@ -50,7 +50,6 @@ public:
   is_streaming = f.get('stream', False)
   response_type = f'{method_name}Response' 
   response_param = f'::grpc::ServerWriter<{response_type}>* writer' if is_streaming else f'{response_type}* response'
-
 %>\
   ::grpc::Status ${method_name}(::grpc::ServerContext* context, const ${method_name}Request* request, ${response_param}) override;
 % endfor

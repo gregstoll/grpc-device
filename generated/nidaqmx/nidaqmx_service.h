@@ -37,6 +37,7 @@ public:
   ::grpc::Status SetChanAttributeStr(::grpc::ServerContext* context, const SetChanAttributeStrRequest* request, SetChanAttributeStrResponse* response) override;
   ::grpc::Status ReadAnalogF64(::grpc::ServerContext* context, const ReadAnalogF64Request* request, ReadAnalogF64Response* response) override;
   ::grpc::Status ReadAnalogF64StreamCodegen(::grpc::ServerContext* context, const ReadAnalogF64StreamCodegenRequest* request, ::grpc::ServerWriter<ReadAnalogF64StreamCodegenResponse>* writer) override;
+  ::grpc::Status ReadAnalogF64StreamCustom(::grpc::ServerContext* context, const ReadAnalogF64StreamCustomRequest* request, ::grpc::ServerWriter<ReadAnalogF64StreamCustomResponse>* writer) override;
   ::grpc::Status CfgSampClkTiming(::grpc::ServerContext* context, const CfgSampClkTimingRequest* request, CfgSampClkTimingResponse* response) override;
 private:
   NiDAQmxLibraryInterface* library_;
