@@ -24,6 +24,8 @@ class NiDAQmxMockLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   MOCK_METHOD(int32, SetChanAttributeU32, (TaskHandle task, const char* channel, int32 attribute, uInt32 value), (override));
   MOCK_METHOD(int32, GetChanAttributeF64, (TaskHandle task, const char* channel, int32 attribute, double* value), (override));
   MOCK_METHOD(int32, SetChanAttributeF64, (TaskHandle task, const char* channel, int32 attribute, double value), (override));
+  MOCK_METHOD(int32, GetChanAttributeStr, (TaskHandle task, const char* channel, int32 attribute, char value[], int32 size), (override));
+  MOCK_METHOD(int32, SetChanAttributeStr, (TaskHandle task, const char* channel, int32 attribute, const char* value), (override));
   MOCK_METHOD(int32, CfgSampClkTiming, (TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan), (override));
 };
 

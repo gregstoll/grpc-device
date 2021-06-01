@@ -5,7 +5,7 @@ def get_include_guard_name(config, suffix):
     return include_guard_name.upper()
 
 def is_string_arg(parameter):
-    return parameter['type'] == 'ViChar[]' or parameter['type'] == 'ViInt8[]'
+    return parameter['type'] in ['ViChar[]', 'ViInt8[]', 'char[]']
 
 def create_args(parameters):
     result = ''

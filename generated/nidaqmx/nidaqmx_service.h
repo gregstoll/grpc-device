@@ -31,6 +31,8 @@ public:
   ::grpc::Status SetChanAttributeU32(::grpc::ServerContext* context, const SetChanAttributeU32Request* request, SetChanAttributeU32Response* response) override;
   ::grpc::Status GetChanAttributeF64(::grpc::ServerContext* context, const GetChanAttributeF64Request* request, GetChanAttributeF64Response* response) override;
   ::grpc::Status SetChanAttributeF64(::grpc::ServerContext* context, const SetChanAttributeF64Request* request, SetChanAttributeF64Response* response) override;
+  ::grpc::Status GetChanAttributeStr(::grpc::ServerContext* context, const GetChanAttributeStrRequest* request, GetChanAttributeStrResponse* response) override;
+  ::grpc::Status SetChanAttributeStr(::grpc::ServerContext* context, const SetChanAttributeStrRequest* request, SetChanAttributeStrResponse* response) override;
   ::grpc::Status CfgSampClkTiming(::grpc::ServerContext* context, const CfgSampClkTimingRequest* request, CfgSampClkTimingResponse* response) override;
 private:
   NiDAQmxLibraryInterface* library_;

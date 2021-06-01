@@ -28,6 +28,8 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.SetChanAttributeU32 = reinterpret_cast<SetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
   function_pointers_.GetChanAttributeF64 = reinterpret_cast<GetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
   function_pointers_.SetChanAttributeF64 = reinterpret_cast<SetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
+  function_pointers_.GetChanAttributeStr = reinterpret_cast<GetChanAttributeStrPtr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
+  function_pointers_.SetChanAttributeStr = reinterpret_cast<SetChanAttributeStrPtr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
   function_pointers_.CfgSampClkTiming = reinterpret_cast<CfgSampClkTimingPtr>(shared_library_.get_function_pointer("DAQmxCfgSampClkTiming"));
 }
 
@@ -105,6 +107,22 @@ int32 NiDAQmxLibrary::SetChanAttributeF64(TaskHandle task, const char* channel, 
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxSetChanAttribute.");
   }
   return function_pointers_.SetChanAttributeF64(task, channel, attribute, value);
+}
+
+int32 NiDAQmxLibrary::GetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size)
+{
+  if (!function_pointers_.GetChanAttributeStr) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxGetChanAttribute.");
+  }
+  return function_pointers_.GetChanAttributeStr(task, channel, attribute, value, size);
+}
+
+int32 NiDAQmxLibrary::SetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, const char* value)
+{
+  if (!function_pointers_.SetChanAttributeStr) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxSetChanAttribute.");
+  }
+  return function_pointers_.SetChanAttributeStr(task, channel, attribute, value);
 }
 
 int32 NiDAQmxLibrary::CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan)

@@ -25,6 +25,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
   int32 GetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double* value);
   int32 SetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double value);
+  int32 GetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
+  int32 SetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, const char* value);
   int32 CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
  private:
@@ -35,6 +37,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using SetChanAttributeU32Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
   using GetChanAttributeF64Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, double* value);
   using SetChanAttributeF64Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, double value);
+  using GetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
+  using SetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, const char* value);
   using CfgSampClkTimingPtr = int32 (*)(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
   typedef struct FunctionPointers {
@@ -45,6 +49,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     SetChanAttributeU32Ptr SetChanAttributeU32;
     GetChanAttributeF64Ptr GetChanAttributeF64;
     SetChanAttributeF64Ptr SetChanAttributeF64;
+    GetChanAttributeStrPtr GetChanAttributeStr;
+    SetChanAttributeStrPtr SetChanAttributeStr;
     CfgSampClkTimingPtr CfgSampClkTiming;
   } FunctionLoadStatus;
 

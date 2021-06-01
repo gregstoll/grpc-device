@@ -198,6 +198,73 @@ functions = {
         ],
         'returns': 'int32'
     },
+    'GetChanAttributeStr': {
+        'cname' : 'DAQmxGetChanAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'channel',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'char[]',
+                'grpc_type': 'string',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'size'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'size',
+                'type': 'int32',
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetChanAttributeStr': {
+        'cname' : 'DAQmxSetChanAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'channel',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+        ],
+        'returns': 'int32'
+    },
     'CfgSampClkTiming': {
         'parameters': [
             {
