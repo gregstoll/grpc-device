@@ -18,6 +18,12 @@ import "session.proto";
 service NiDAQmx {
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
   rpc ClearTask(ClearTaskRequest) returns (ClearTaskResponse);
+  rpc CreateAIVoltageChan(CreateAIVoltageChanRequest) returns (CreateAIVoltageChanResponse);
+  rpc GetChanAttributeU32(GetChanAttributeU32Request) returns (GetChanAttributeU32Response);
+  rpc SetChanAttributeU32(SetChanAttributeU32Request) returns (SetChanAttributeU32Response);
+  rpc GetChanAttributeF64(GetChanAttributeF64Request) returns (GetChanAttributeF64Response);
+  rpc SetChanAttributeF64(SetChanAttributeF64Request) returns (SetChanAttributeF64Response);
+  rpc CfgSampClkTiming(CfgSampClkTimingRequest) returns (CfgSampClkTimingResponse);
 }
 
 enum NiDAQmxAttributes {
@@ -31,14 +37,86 @@ message CreateTaskRequest {
 
 message CreateTaskResponse {
   int32 status = 1;
-  nidevice_grpc.Session task_handle = 2;
+  nidevice_grpc.Session task = 2;
 }
 
 message ClearTaskRequest {
-  nidevice_grpc.Session task_handle = 1;
+  nidevice_grpc.Session task = 1;
 }
 
 message ClearTaskResponse {
+  int32 status = 1;
+}
+
+message CreateAIVoltageChanRequest {
+  nidevice_grpc.Session task = 1;
+  string physical_channel = 2;
+  string name_to_assign_to_channel = 3;
+  int32 terminal_config = 4;
+  double min_val = 5;
+  double max_val = 6;
+  int32 units = 7;
+  string custom_scale_name = 8;
+}
+
+message CreateAIVoltageChanResponse {
+  int32 status = 1;
+}
+
+message GetChanAttributeU32Request {
+  nidevice_grpc.Session task = 1;
+  string channel = 2;
+  int32 attribute = 3;
+}
+
+message GetChanAttributeU32Response {
+  int32 status = 1;
+  uint32 value = 2;
+}
+
+message SetChanAttributeU32Request {
+  nidevice_grpc.Session task = 1;
+  string channel = 2;
+  int32 attribute = 3;
+  uint32 value = 4;
+}
+
+message SetChanAttributeU32Response {
+  int32 status = 1;
+}
+
+message GetChanAttributeF64Request {
+  nidevice_grpc.Session task = 1;
+  string channel = 2;
+  int32 attribute = 3;
+}
+
+message GetChanAttributeF64Response {
+  int32 status = 1;
+  double value = 2;
+}
+
+message SetChanAttributeF64Request {
+  nidevice_grpc.Session task = 1;
+  string channel = 2;
+  int32 attribute = 3;
+  double value = 4;
+}
+
+message SetChanAttributeF64Response {
+  int32 status = 1;
+}
+
+message CfgSampClkTimingRequest {
+  nidevice_grpc.Session task = 1;
+  string source = 2;
+  double rate = 3;
+  int32 active_edge = 4;
+  int32 sample_mode = 5;
+  uint64 samps_per_chan = 6;
+}
+
+message CfgSampClkTimingResponse {
   int32 status = 1;
 }
 

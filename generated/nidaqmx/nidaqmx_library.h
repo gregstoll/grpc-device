@@ -18,16 +18,34 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   virtual ~NiDAQmxLibrary();
 
   ::grpc::Status check_function_exists(std::string functionName);
-  int32 CreateTask(const char* taskName, TaskHandle* taskHandle);
-  int32 ClearTask(TaskHandle taskHandle);
+  int32 CreateTask(const char* taskName, TaskHandle* task);
+  int32 ClearTask(TaskHandle task);
+  int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
+  int32 GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value);
+  int32 SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
+  int32 GetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double* value);
+  int32 SetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double value);
+  int32 CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
  private:
-  using CreateTaskPtr = int32 (*)(const char* taskName, TaskHandle* taskHandle);
-  using ClearTaskPtr = int32 (*)(TaskHandle taskHandle);
+  using CreateTaskPtr = int32 (*)(const char* taskName, TaskHandle* task);
+  using ClearTaskPtr = int32 (*)(TaskHandle task);
+  using CreateAIVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
+  using GetChanAttributeU32Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, uInt32* value);
+  using SetChanAttributeU32Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
+  using GetChanAttributeF64Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, double* value);
+  using SetChanAttributeF64Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, double value);
+  using CfgSampClkTimingPtr = int32 (*)(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
   typedef struct FunctionPointers {
     CreateTaskPtr CreateTask;
     ClearTaskPtr ClearTask;
+    CreateAIVoltageChanPtr CreateAIVoltageChan;
+    GetChanAttributeU32Ptr GetChanAttributeU32;
+    SetChanAttributeU32Ptr SetChanAttributeU32;
+    GetChanAttributeF64Ptr GetChanAttributeF64;
+    SetChanAttributeF64Ptr SetChanAttributeF64;
+    CfgSampClkTimingPtr CfgSampClkTiming;
   } FunctionLoadStatus;
 
   nidevice_grpc::SharedLibrary shared_library_;

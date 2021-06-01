@@ -23,6 +23,12 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   }
   function_pointers_.CreateTask = reinterpret_cast<CreateTaskPtr>(shared_library_.get_function_pointer("DAQmxCreateTask"));
   function_pointers_.ClearTask = reinterpret_cast<ClearTaskPtr>(shared_library_.get_function_pointer("DAQmxClearTask"));
+  function_pointers_.CreateAIVoltageChan = reinterpret_cast<CreateAIVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAIVoltageChan"));
+  function_pointers_.GetChanAttributeU32 = reinterpret_cast<GetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
+  function_pointers_.SetChanAttributeU32 = reinterpret_cast<SetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
+  function_pointers_.GetChanAttributeF64 = reinterpret_cast<GetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
+  function_pointers_.SetChanAttributeF64 = reinterpret_cast<SetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
+  function_pointers_.CfgSampClkTiming = reinterpret_cast<CfgSampClkTimingPtr>(shared_library_.get_function_pointer("DAQmxCfgSampClkTiming"));
 }
 
 NiDAQmxLibrary::~NiDAQmxLibrary()
@@ -32,32 +38,81 @@ NiDAQmxLibrary::~NiDAQmxLibrary()
 ::grpc::Status NiDAQmxLibrary::check_function_exists(std::string functionName)
 {
   return shared_library_.function_exists(functionName.c_str())
-    ? ::grpc::Status::OK
-    : ::grpc::Status(::grpc::NOT_FOUND, "Could not find the function " + functionName);
+      ? ::grpc::Status::OK
+      : ::grpc::Status(::grpc::NOT_FOUND, "Could not find the function " + functionName);
 }
 
-int32 NiDAQmxLibrary::CreateTask(const char* taskName, TaskHandle* taskHandle)
+int32 NiDAQmxLibrary::CreateTask(const char* taskName, TaskHandle* task)
 {
   if (!function_pointers_.CreateTask) {
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateTask.");
   }
 #if defined(_MSC_VER)
-  return DAQmxCreateTask(taskName, taskHandle);
+  return DAQmxCreateTask(taskName, task);
 #else
-  return function_pointers_.CreateTask(taskName, taskHandle);
+  return function_pointers_.CreateTask(taskName, task);
 #endif
 }
 
-int32 NiDAQmxLibrary::ClearTask(TaskHandle taskHandle)
+int32 NiDAQmxLibrary::ClearTask(TaskHandle task)
 {
   if (!function_pointers_.ClearTask) {
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxClearTask.");
   }
 #if defined(_MSC_VER)
-  return DAQmxClearTask(taskHandle);
+  return DAQmxClearTask(task);
 #else
-  return function_pointers_.ClearTask(taskHandle);
+  return function_pointers_.ClearTask(task);
 #endif
+  return function_pointers_.ClearTask(task);
+}
+
+int32 NiDAQmxLibrary::CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name)
+{
+  if (!function_pointers_.CreateAIVoltageChan) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateAIVoltageChan.");
+  }
+  return function_pointers_.CreateAIVoltageChan(task, physical_channel, name_to_assign_to_channel, terminal_config, min_val, max_val, units, custom_scale_name);
+}
+
+int32 NiDAQmxLibrary::GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value)
+{
+  if (!function_pointers_.GetChanAttributeU32) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxGetChanAttribute.");
+  }
+  return function_pointers_.GetChanAttributeU32(task, channel, attribute, value);
+}
+
+int32 NiDAQmxLibrary::SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value)
+{
+  if (!function_pointers_.SetChanAttributeU32) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxSetChanAttribute.");
+  }
+  return function_pointers_.SetChanAttributeU32(task, channel, attribute, value);
+}
+
+int32 NiDAQmxLibrary::GetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double* value)
+{
+  if (!function_pointers_.GetChanAttributeF64) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxGetChanAttribute.");
+  }
+  return function_pointers_.GetChanAttributeF64(task, channel, attribute, value);
+}
+
+int32 NiDAQmxLibrary::SetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double value)
+{
+  if (!function_pointers_.SetChanAttributeF64) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxSetChanAttribute.");
+  }
+  return function_pointers_.SetChanAttributeF64(task, channel, attribute, value);
+}
+
+int32 NiDAQmxLibrary::CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan)
+{
+  if (!function_pointers_.CfgSampClkTiming) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCfgSampClkTiming.");
+  }
+  return function_pointers_.CfgSampClkTiming(task, source, rate, active_edge, sample_mode, samps_per_chan);
 }
 
 }  // namespace nidaqmx_grpc

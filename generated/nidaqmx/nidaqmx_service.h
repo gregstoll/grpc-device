@@ -26,6 +26,12 @@ public:
   virtual ~NiDAQmxService();
   ::grpc::Status CreateTask(::grpc::ServerContext* context, const CreateTaskRequest* request, CreateTaskResponse* response) override;
   ::grpc::Status ClearTask(::grpc::ServerContext* context, const ClearTaskRequest* request, ClearTaskResponse* response) override;
+  ::grpc::Status CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response) override;
+  ::grpc::Status GetChanAttributeU32(::grpc::ServerContext* context, const GetChanAttributeU32Request* request, GetChanAttributeU32Response* response) override;
+  ::grpc::Status SetChanAttributeU32(::grpc::ServerContext* context, const SetChanAttributeU32Request* request, SetChanAttributeU32Response* response) override;
+  ::grpc::Status GetChanAttributeF64(::grpc::ServerContext* context, const GetChanAttributeF64Request* request, GetChanAttributeF64Response* response) override;
+  ::grpc::Status SetChanAttributeF64(::grpc::ServerContext* context, const SetChanAttributeF64Request* request, SetChanAttributeF64Response* response) override;
+  ::grpc::Status CfgSampClkTiming(::grpc::ServerContext* context, const CfgSampClkTimingRequest* request, CfgSampClkTimingResponse* response) override;
 private:
   NiDAQmxLibraryInterface* library_;
   nidevice_grpc::ResourceRepository<TaskHandle> session_repository_;

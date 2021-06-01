@@ -34,9 +34,9 @@ namespace nidaqmx_grpc {
       const char* task_name = request->task_name().c_str();
 
       auto init_lambda = [&] () {
-        TaskHandle task_handle;
-        int status = library_->CreateTask(task_name, &task_handle);
-        return std::make_tuple(status, task_handle);
+        TaskHandle task;
+        int status = library_->CreateTask(task_name, &task);
+        return std::make_tuple(status, task);
       };
       uint32_t session_id = 0;
       const std::string& session_name = request->session_name();
@@ -44,7 +44,7 @@ namespace nidaqmx_grpc {
       int status = session_repository_.add_session(session_name, init_lambda, cleanup_lambda, session_id);
       response->set_status(status);
       if (status == 0) {
-        response->mutable_task_handle()->set_id(session_id);
+        response->mutable_task()->set_id(session_id);
       }
       return ::grpc::Status::OK;
     }
@@ -61,9 +61,153 @@ namespace nidaqmx_grpc {
       return ::grpc::Status::CANCELLED;
     }
     try {
-      auto task_handle_grpc_session = request->task_handle();
-      auto task_handle = session_repository_.access_session(task_handle_grpc_session.id(), task_handle_grpc_session.name());
-      auto status = library_->ClearTask(task_handle);
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto status = library_->ClearTask(task);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* physical_channel = request->physical_channel().c_str();
+      const char* name_to_assign_to_channel = request->name_to_assign_to_channel().c_str();
+      int32 terminal_config = request->terminal_config();
+      double min_val = request->min_val();
+      double max_val = request->max_val();
+      int32 units = request->units();
+      const char* custom_scale_name = request->custom_scale_name().c_str();
+      auto status = library_->CreateAIVoltageChan(task, physical_channel, name_to_assign_to_channel, terminal_config, min_val, max_val, units, custom_scale_name);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::GetChanAttributeU32(::grpc::ServerContext* context, const GetChanAttributeU32Request* request, GetChanAttributeU32Response* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* channel = request->channel().c_str();
+      int32 attribute = request->attribute();
+      uInt32 value {};
+      auto status = library_->GetChanAttributeU32(task, channel, attribute, &value);
+      response->set_status(status);
+      if (status == 0) {
+        response->set_value(value);
+      }
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::SetChanAttributeU32(::grpc::ServerContext* context, const SetChanAttributeU32Request* request, SetChanAttributeU32Response* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* channel = request->channel().c_str();
+      int32 attribute = request->attribute();
+      uInt32 value = request->value();
+      auto status = library_->SetChanAttributeU32(task, channel, attribute, value);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::GetChanAttributeF64(::grpc::ServerContext* context, const GetChanAttributeF64Request* request, GetChanAttributeF64Response* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* channel = request->channel().c_str();
+      int32 attribute = request->attribute();
+      double value {};
+      auto status = library_->GetChanAttributeF64(task, channel, attribute, &value);
+      response->set_status(status);
+      if (status == 0) {
+        response->set_value(value);
+      }
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::SetChanAttributeF64(::grpc::ServerContext* context, const SetChanAttributeF64Request* request, SetChanAttributeF64Response* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* channel = request->channel().c_str();
+      int32 attribute = request->attribute();
+      double value = request->value();
+      auto status = library_->SetChanAttributeF64(task, channel, attribute, value);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::CfgSampClkTiming(::grpc::ServerContext* context, const CfgSampClkTimingRequest* request, CfgSampClkTimingResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* source = request->source().c_str();
+      double rate = request->rate();
+      int32 active_edge = request->active_edge();
+      int32 sample_mode = request->sample_mode();
+      uInt64 samps_per_chan = request->samps_per_chan();
+      auto status = library_->CfgSampClkTiming(task, source, rate, active_edge, sample_mode, samps_per_chan);
       response->set_status(status);
       return ::grpc::Status::OK;
     }

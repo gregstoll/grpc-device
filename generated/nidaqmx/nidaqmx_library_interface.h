@@ -15,8 +15,14 @@ class NiDAQmxLibraryInterface {
  public:
   virtual ~NiDAQmxLibraryInterface() {}
 
-  virtual int32 CreateTask(const char* taskName, TaskHandle* taskHandle) = 0;
-  virtual int32 ClearTask(TaskHandle taskHandle) = 0;
+  virtual int32 CreateTask(const char* taskName, TaskHandle* task) = 0;
+  virtual int32 ClearTask(TaskHandle task) = 0;
+  virtual int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name) = 0;
+  virtual int32 GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value) = 0;
+  virtual int32 SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value) = 0;
+  virtual int32 GetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double* value) = 0;
+  virtual int32 SetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double value) = 0;
+  virtual int32 CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan) = 0;
 };
 
 }  // namespace nidaqmx_grpc

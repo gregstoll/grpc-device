@@ -17,8 +17,14 @@ namespace unit {
 
 class NiDAQmxMockLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
  public:
-  MOCK_METHOD(int32, CreateTask, (const char* taskName, TaskHandle* taskHandle), (override));
-  MOCK_METHOD(int32, ClearTask, (TaskHandle taskHandle), (override));
+  MOCK_METHOD(int32, CreateTask, (const char* taskName, TaskHandle* task), (override));
+  MOCK_METHOD(int32, ClearTask, (TaskHandle task), (override));
+  MOCK_METHOD(int32, CreateAIVoltageChan, (TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name), (override));
+  MOCK_METHOD(int32, GetChanAttributeU32, (TaskHandle task, const char* channel, int32 attribute, uInt32* value), (override));
+  MOCK_METHOD(int32, SetChanAttributeU32, (TaskHandle task, const char* channel, int32 attribute, uInt32 value), (override));
+  MOCK_METHOD(int32, GetChanAttributeF64, (TaskHandle task, const char* channel, int32 attribute, double* value), (override));
+  MOCK_METHOD(int32, SetChanAttributeF64, (TaskHandle task, const char* channel, int32 attribute, double value), (override));
+  MOCK_METHOD(int32, CfgSampClkTiming, (TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan), (override));
 };
 
 }  // namespace unit
