@@ -28,6 +28,7 @@ service NiDAQmx {
   rpc GetChanAttributeStr(GetChanAttributeStrRequest) returns (GetChanAttributeStrResponse);
   rpc SetChanAttributeStr(SetChanAttributeStrRequest) returns (SetChanAttributeStrResponse);
   rpc ReadAnalogF64(ReadAnalogF64Request) returns (ReadAnalogF64Response);
+  rpc ReadAnalogF64StreamCodegen(ReadAnalogF64StreamCodegenRequest) returns (stream ReadAnalogF64StreamCodegenResponse);
   rpc CfgSampClkTiming(CfgSampClkTimingRequest) returns (CfgSampClkTimingResponse);
 }
 
@@ -161,6 +162,21 @@ message ReadAnalogF64Request {
 }
 
 message ReadAnalogF64Response {
+  int32 status = 1;
+  repeated double read_array = 2;
+  int32 samps_per_chan = 3;
+}
+
+message ReadAnalogF64StreamCodegenRequest {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  double timeout = 3;
+  int32 fill_mode = 4;
+  uint32 array_size_in_samps = 5;
+  uint64 reserved = 6;
+}
+
+message ReadAnalogF64StreamCodegenResponse {
   int32 status = 1;
   repeated double read_array = 2;
   int32 samps_per_chan = 3;

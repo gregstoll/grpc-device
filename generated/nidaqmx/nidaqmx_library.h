@@ -30,6 +30,7 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 GetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
   int32 SetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, const char* value);
   int32 ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  int32 ReadAnalogF64StreamCodegen(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   int32 CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
  private:
@@ -45,6 +46,7 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using GetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
   using SetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, const char* value);
   using ReadAnalogF64Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  using ReadAnalogF64StreamCodegenPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   using CfgSampClkTimingPtr = int32 (*)(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan);
 
   typedef struct FunctionPointers {
@@ -60,6 +62,7 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     GetChanAttributeStrPtr GetChanAttributeStr;
     SetChanAttributeStrPtr SetChanAttributeStr;
     ReadAnalogF64Ptr ReadAnalogF64;
+    ReadAnalogF64StreamCodegenPtr ReadAnalogF64StreamCodegen;
     CfgSampClkTimingPtr CfgSampClkTiming;
   } FunctionLoadStatus;
 

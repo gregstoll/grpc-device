@@ -47,8 +47,12 @@ public:
 <%
   f = functions[function]
   method_name = common_helpers.snake_to_pascal(function)
+  is_streaming = f.get('stream', False)
+  response_type = f'{method_name}Response' 
+  response_param = f'::grpc::ServerWriter<{response_type}>* writer' if is_streaming else f'{response_type}* response'
+
 %>\
-  ::grpc::Status ${method_name}(::grpc::ServerContext* context, const ${method_name}Request* request, ${method_name}Response* response) override;
+  ::grpc::Status ${method_name}(::grpc::ServerContext* context, const ${method_name}Request* request, ${response_param}) override;
 % endfor
 private:
   ${service_class_prefix}LibraryInterface* library_;

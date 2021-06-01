@@ -29,6 +29,28 @@ ${initialize_input_params(function_name, parameters)}
       return ::grpc::Status::OK;\
 </%def>
 
+## define_streaming_method_body
+<%def name="define_streaming_method_body(function_name, function_data, parameters)">\
+<%
+  config = data['config']
+  output_parameters = [p for p in parameters if common_helpers.is_output_parameter(p)]
+%>\
+      ${function_name}Response localResponse;
+      auto response = &localResponse;
+${initialize_input_params(function_name, parameters)}\
+${initialize_output_params(output_parameters)}\
+      do {
+        auto status = library_->${function_name}(${service_helpers.create_args(parameters)});
+        response->set_status(status);
+% if output_parameters:
+        if (status == 0) {
+  ${set_response_values(output_parameters=output_parameters)}\
+        }
+      } while (writer->Write(localResponse));
+% endif
+      return ::grpc::Status::OK;\
+</%def>
+
 ## Generate the core method body for an ivi-dance method. This should be what gets included within the try block in the service method.
 <%def name="define_ivi_dance_method_body(function_name, function_data, parameters)">\
 <%

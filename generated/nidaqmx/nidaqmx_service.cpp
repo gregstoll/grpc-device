@@ -313,6 +313,40 @@ namespace nidaqmx_grpc {
 
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::ReadAnalogF64StreamCodegen(::grpc::ServerContext* context, const ReadAnalogF64StreamCodegenRequest* request, ::grpc::ServerWriter<ReadAnalogF64StreamCodegenResponse>* writer)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      ReadAnalogF64StreamCodegenResponse localResponse;
+      auto response = &localResponse;
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      int32 num_samps_per_chan = request->num_samps_per_chan();
+      double timeout = request->timeout();
+      int32 fill_mode = request->fill_mode();
+      uInt32 array_size_in_samps = request->array_size_in_samps();
+      uInt64 reserved = request->reserved();
+      response->mutable_read_array()->Resize(array_size_in_samps, 0);
+      float64* read_array = response->mutable_read_array()->mutable_data();
+      int32 samps_per_chan {};
+      do {
+        auto status = library_->ReadAnalogF64StreamCodegen(task, num_samps_per_chan, timeout, fill_mode, read_array, array_size_in_samps, &samps_per_chan, reserved);
+        response->set_status(status);
+        if (status == 0) {
+          response->set_samps_per_chan(samps_per_chan);
+        }
+      } while (writer->Write(localResponse));
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
   ::grpc::Status NiDAQmxService::CfgSampClkTiming(::grpc::ServerContext* context, const CfgSampClkTimingRequest* request, CfgSampClkTimingResponse* response)
   {
     if (context->IsCancelled()) {

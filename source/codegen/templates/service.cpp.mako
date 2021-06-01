@@ -71,10 +71,13 @@ namespace ${config["namespace_component"]}_grpc {
     function_data = functions[function_name]
     method_name = common_helpers.snake_to_pascal(function_name)
     parameters = function_data['parameters']
+    is_streaming = function_data.get('stream', False)
+    response_type = f'{method_name}Response'
+    response_param = f'::grpc::ServerWriter<{response_type}>* writer' if is_streaming else f'{response_type}* response'
 %>\
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
-  ::grpc::Status ${service_class_prefix}Service::${method_name}(::grpc::ServerContext* context, const ${method_name}Request* request, ${method_name}Response* response)
+  ::grpc::Status ${service_class_prefix}Service::${method_name}(::grpc::ServerContext* context, const ${method_name}Request* request, ${response_param})
   {
     if (context->IsCancelled()) {
       return ::grpc::Status::CANCELLED;
@@ -86,6 +89,11 @@ namespace ${config["namespace_component"]}_grpc {
 ${mako_helper.define_init_method_body(function_name=function_name, function_data=function_data, parameters=parameters, resource_handle_type=resource_handle_type)}
 %   elif common_helpers.has_ivi_dance_param(parameters):
 ${mako_helper.define_ivi_dance_method_body(function_name=function_name, function_data=function_data, parameters=parameters)}
+%   elif is_streaming:
+${mako_helper.define_streaming_method_body(
+  function_name=function_name, 
+  function_data=function_data, 
+  parameters=parameters)}
 %   else:
 ${mako_helper.define_simple_method_body(function_name=function_name, function_data=function_data, parameters=parameters)}
 %   endif
