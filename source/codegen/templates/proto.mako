@@ -32,10 +32,12 @@ service ${service_class_prefix} {
 % for function in common_helpers.filter_proto_rpc_functions(functions):
 <%
   method_name = common_helpers.snake_to_pascal(function)
-  is_streaming = functions.get(method_name, {}).get('stream', False)
-  response_prefix = 'stream ' if is_streaming else ''
+  is_streaming_out = common_helpers.is_streaming_out(functions.get(method_name, {}))
+  response_prefix = 'stream ' if is_streaming_out else ''
+  is_streaming_in = common_helpers.is_streaming_in(functions.get(method_name, {}))
+  request_prefix = 'stream ' if is_streaming_in else ''
 %>\
-  rpc ${method_name}(${method_name}Request) returns (${response_prefix}${method_name}Response);
+  rpc ${method_name}(${request_prefix}${method_name}Request) returns (${response_prefix}${method_name}Response);
 % endfor
 }
 

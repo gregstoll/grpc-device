@@ -26,6 +26,7 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.StartTask = reinterpret_cast<StartTaskPtr>(shared_library_.get_function_pointer("DAQmxStartTask"));
   function_pointers_.StopTask = reinterpret_cast<StopTaskPtr>(shared_library_.get_function_pointer("DAQmxStopTask"));
   function_pointers_.CreateAIVoltageChan = reinterpret_cast<CreateAIVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAIVoltageChan"));
+  function_pointers_.CreateAOVoltageChan = reinterpret_cast<CreateAOVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAOVoltageChan"));
   function_pointers_.GetChanAttributeU32 = reinterpret_cast<GetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
   function_pointers_.SetChanAttributeU32 = reinterpret_cast<SetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
   function_pointers_.GetChanAttributeF64 = reinterpret_cast<GetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
@@ -35,6 +36,8 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.ReadAnalogF64 = reinterpret_cast<ReadAnalogF64Ptr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.ReadAnalogF64StreamCodegen = reinterpret_cast<ReadAnalogF64StreamCodegenPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.ReadAnalogF64StreamCustom = reinterpret_cast<ReadAnalogF64StreamCustomPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
+  function_pointers_.WriteAnalogF64 = reinterpret_cast<WriteAnalogF64Ptr>(shared_library_.get_function_pointer("DAQmxWriteAnalogF64"));
+  function_pointers_.WriteAnalogF64StreamCustom = reinterpret_cast<WriteAnalogF64StreamCustomPtr>(shared_library_.get_function_pointer("DAQmxWriteAnalogF64Stream"));
   function_pointers_.CfgSampClkTiming = reinterpret_cast<CfgSampClkTimingPtr>(shared_library_.get_function_pointer("DAQmxCfgSampClkTiming"));
 }
 
@@ -96,6 +99,14 @@ int32 NiDAQmxLibrary::CreateAIVoltageChan(TaskHandle task, const char* physical_
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateAIVoltageChan.");
   }
   return function_pointers_.CreateAIVoltageChan(task, physical_channel, name_to_assign_to_channel, terminal_config, min_val, max_val, units, custom_scale_name);
+}
+
+int32 NiDAQmxLibrary::CreateAOVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name)
+{
+  if (!function_pointers_.CreateAOVoltageChan) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateAOVoltageChan.");
+  }
+  return function_pointers_.CreateAOVoltageChan(task, physical_channel, name_to_assign_to_channel, min_val, max_val, units, custom_scale_name);
 }
 
 int32 NiDAQmxLibrary::GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value)
@@ -168,6 +179,22 @@ int32 NiDAQmxLibrary::ReadAnalogF64StreamCustom(TaskHandle task, int32 numSampsP
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadAnalogF64.");
   }
   return function_pointers_.ReadAnalogF64StreamCustom(task, numSampsPerChan, timeout, fillMode, readArray, arraySizeInSamps, sampsPerChan, reserved);
+}
+
+int32 NiDAQmxLibrary::WriteAnalogF64(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const float64* writeArray, int32* sampsPerChanWritten, uInt64 reserved)
+{
+  if (!function_pointers_.WriteAnalogF64) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxWriteAnalogF64.");
+  }
+  return function_pointers_.WriteAnalogF64(task, numSampsPerChan, autoStart, timeout, dataLayout, writeArray, sampsPerChanWritten, reserved);
+}
+
+int32 NiDAQmxLibrary::WriteAnalogF64StreamCustom(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const float64* writeArray, int32* sampsPerChanWritten, uInt64 reserved)
+{
+  if (!function_pointers_.WriteAnalogF64StreamCustom) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxWriteAnalogF64Stream.");
+  }
+  return function_pointers_.WriteAnalogF64StreamCustom(task, numSampsPerChan, autoStart, timeout, dataLayout, writeArray, sampsPerChanWritten, reserved);
 }
 
 int32 NiDAQmxLibrary::CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan)

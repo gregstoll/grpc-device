@@ -20,6 +20,7 @@ class NiDAQmxLibraryInterface {
   virtual int32 StartTask(TaskHandle task) = 0;
   virtual int32 StopTask(TaskHandle task) = 0;
   virtual int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name) = 0;
+  virtual int32 CreateAOVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name) = 0;
   virtual int32 GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value) = 0;
   virtual int32 SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value) = 0;
   virtual int32 GetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double* value) = 0;
@@ -29,6 +30,8 @@ class NiDAQmxLibraryInterface {
   virtual int32 ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved) = 0;
   virtual int32 ReadAnalogF64StreamCodegen(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved) = 0;
   virtual int32 ReadAnalogF64StreamCustom(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved) = 0;
+  virtual int32 WriteAnalogF64(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const float64* writeArray, int32* sampsPerChanWritten, uInt64 reserved) = 0;
+  virtual int32 WriteAnalogF64StreamCustom(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const float64* writeArray, int32* sampsPerChanWritten, uInt64 reserved) = 0;
   virtual int32 CfgSampClkTiming(TaskHandle task, const char* source, double rate, int32 active_edge, int32 sample_mode, uInt64 samps_per_chan) = 0;
 };
 

@@ -21,6 +21,7 @@ service NiDAQmx {
   rpc StartTask(StartTaskRequest) returns (StartTaskResponse);
   rpc StopTask(StopTaskRequest) returns (StopTaskResponse);
   rpc CreateAIVoltageChan(CreateAIVoltageChanRequest) returns (CreateAIVoltageChanResponse);
+  rpc CreateAOVoltageChan(CreateAOVoltageChanRequest) returns (CreateAOVoltageChanResponse);
   rpc GetChanAttributeU32(GetChanAttributeU32Request) returns (GetChanAttributeU32Response);
   rpc SetChanAttributeU32(SetChanAttributeU32Request) returns (SetChanAttributeU32Response);
   rpc GetChanAttributeF64(GetChanAttributeF64Request) returns (GetChanAttributeF64Response);
@@ -30,6 +31,8 @@ service NiDAQmx {
   rpc ReadAnalogF64(ReadAnalogF64Request) returns (ReadAnalogF64Response);
   rpc ReadAnalogF64StreamCodegen(ReadAnalogF64StreamCodegenRequest) returns (stream ReadAnalogF64StreamCodegenResponse);
   rpc ReadAnalogF64StreamCustom(ReadAnalogF64StreamCustomRequest) returns (stream ReadAnalogF64StreamCustomResponse);
+  rpc WriteAnalogF64(WriteAnalogF64Request) returns (WriteAnalogF64Response);
+  rpc WriteAnalogF64StreamCustom(stream WriteAnalogF64StreamCustomRequest) returns (WriteAnalogF64StreamCustomResponse);
   rpc CfgSampClkTiming(CfgSampClkTimingRequest) returns (CfgSampClkTimingResponse);
 }
 
@@ -650,6 +653,20 @@ message CreateAIVoltageChanResponse {
   int32 status = 1;
 }
 
+message CreateAOVoltageChanRequest {
+  nidevice_grpc.Session task = 1;
+  string physical_channel = 2;
+  string name_to_assign_to_channel = 3;
+  double min_val = 4;
+  double max_val = 5;
+  int32 units = 6;
+  string custom_scale_name = 7;
+}
+
+message CreateAOVoltageChanResponse {
+  int32 status = 1;
+}
+
 message GetChanAttributeU32Request {
   nidevice_grpc.Session task = 1;
   string channel = 2;
@@ -778,6 +795,36 @@ message ReadAnalogF64StreamCustomResponse {
   int32 status = 1;
   repeated double read_array = 2;
   int32 samps_per_chan = 3;
+}
+
+message WriteAnalogF64Request {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  int32 auto_start = 3;
+  double timeout = 4;
+  int32 data_layout = 5;
+  repeated double write_array = 6;
+  uint64 reserved = 7;
+}
+
+message WriteAnalogF64Response {
+  int32 status = 1;
+  int32 samps_per_chan_written = 2;
+}
+
+message WriteAnalogF64StreamCustomRequest {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  int32 auto_start = 3;
+  double timeout = 4;
+  int32 data_layout = 5;
+  repeated double write_array = 6;
+  uint64 reserved = 7;
+}
+
+message WriteAnalogF64StreamCustomResponse {
+  int32 status = 1;
+  int32 samps_per_chan_written = 2;
 }
 
 message CfgSampClkTimingRequest {

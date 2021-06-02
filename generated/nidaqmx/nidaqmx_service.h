@@ -29,6 +29,7 @@ public:
   ::grpc::Status StartTask(::grpc::ServerContext* context, const StartTaskRequest* request, StartTaskResponse* response) override;
   ::grpc::Status StopTask(::grpc::ServerContext* context, const StopTaskRequest* request, StopTaskResponse* response) override;
   ::grpc::Status CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response) override;
+  ::grpc::Status CreateAOVoltageChan(::grpc::ServerContext* context, const CreateAOVoltageChanRequest* request, CreateAOVoltageChanResponse* response) override;
   ::grpc::Status GetChanAttributeU32(::grpc::ServerContext* context, const GetChanAttributeU32Request* request, GetChanAttributeU32Response* response) override;
   ::grpc::Status SetChanAttributeU32(::grpc::ServerContext* context, const SetChanAttributeU32Request* request, SetChanAttributeU32Response* response) override;
   ::grpc::Status GetChanAttributeF64(::grpc::ServerContext* context, const GetChanAttributeF64Request* request, GetChanAttributeF64Response* response) override;
@@ -38,6 +39,8 @@ public:
   ::grpc::Status ReadAnalogF64(::grpc::ServerContext* context, const ReadAnalogF64Request* request, ReadAnalogF64Response* response) override;
   ::grpc::Status ReadAnalogF64StreamCodegen(::grpc::ServerContext* context, const ReadAnalogF64StreamCodegenRequest* request, ::grpc::ServerWriter<ReadAnalogF64StreamCodegenResponse>* writer) override;
   ::grpc::Status ReadAnalogF64StreamCustom(::grpc::ServerContext* context, const ReadAnalogF64StreamCustomRequest* request, ::grpc::ServerWriter<ReadAnalogF64StreamCustomResponse>* writer) override;
+  ::grpc::Status WriteAnalogF64(::grpc::ServerContext* context, const WriteAnalogF64Request* request, WriteAnalogF64Response* response) override;
+  ::grpc::Status WriteAnalogF64StreamCustom(::grpc::ServerContext* context, ::grpc::ServerReader<WriteAnalogF64StreamCustomRequest>* reader, WriteAnalogF64StreamCustomResponse* response) override;
   ::grpc::Status CfgSampClkTiming(::grpc::ServerContext* context, const CfgSampClkTimingRequest* request, CfgSampClkTimingResponse* response) override;
 private:
   NiDAQmxLibraryInterface* library_;

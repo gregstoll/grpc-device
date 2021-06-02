@@ -138,6 +138,31 @@ namespace nidaqmx_grpc {
 
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::CreateAOVoltageChan(::grpc::ServerContext* context, const CreateAOVoltageChanRequest* request, CreateAOVoltageChanResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* physical_channel = request->physical_channel().c_str();
+      const char* name_to_assign_to_channel = request->name_to_assign_to_channel().c_str();
+      double min_val = request->min_val();
+      double max_val = request->max_val();
+      int32 units = request->units();
+      const char* custom_scale_name = request->custom_scale_name().c_str();
+      auto status = library_->CreateAOVoltageChan(task, physical_channel, name_to_assign_to_channel, min_val, max_val, units, custom_scale_name);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
   ::grpc::Status NiDAQmxService::GetChanAttributeU32(::grpc::ServerContext* context, const GetChanAttributeU32Request* request, GetChanAttributeU32Response* response)
   {
     if (context->IsCancelled()) {
@@ -410,6 +435,35 @@ namespace nidaqmx_grpc {
           response->set_samps_per_chan(samps_per_chan);
         }
       } while (writer->Write(localResponse));
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::WriteAnalogF64(::grpc::ServerContext* context, const WriteAnalogF64Request* request, WriteAnalogF64Response* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      int32 num_samps_per_chan = request->num_samps_per_chan();
+      int32 auto_start = request->auto_start();
+      double timeout = request->timeout();
+      int32 data_layout = request->data_layout();
+      auto write_array = request->write_array().data();
+      uInt64 reserved = request->reserved();
+      int32 samps_per_chan_written {};
+      auto status = library_->WriteAnalogF64(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, reserved);
+      response->set_status(status);
+      if (status == 0) {
+        response->set_samps_per_chan_written(samps_per_chan_written);
+      }
       return ::grpc::Status::OK;
     }
     catch (nidevice_grpc::LibraryLoadException& ex) {

@@ -104,6 +104,53 @@ functions = {
         ],
         'returns': 'int32'
     },
+    # int32 __CFUNC     DAQmxCreateAOVoltageChan
+    # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[], float64 minVal, float64 maxVal,
+    # int32 units, const char customScaleName[]);
+    'CreateAOVoltageChan': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'physical_channel',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'name_to_assign_to_channel',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'min_val',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'max_val',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'units',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'custom_scale_name',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            }
+        ],
+        'returns': 'int32'
+    },
     # int32 __CFUNC_C   DAQmxGetChanAttribute
     #  (TaskHandle taskHandle, const char channel[], int32 attribute, void *value, ...);
     'GetChanAttributeU32': {
@@ -351,7 +398,7 @@ functions = {
     },
     'ReadAnalogF64StreamCodegen': {
         'cname': 'DAQmxReadAnalogF64',
-        'stream': True,
+        'stream_out': True,
         'parameters': [
             {
                 'direction': 'in',
@@ -408,7 +455,7 @@ functions = {
     'ReadAnalogF64StreamCustom': {
         'cname': 'DAQmxReadAnalogF64',
         'codegen_method': 'CustomCode',
-        'stream': True,
+        'stream_out': True,
         'parameters': [
             {
                 'direction': 'in',
@@ -450,6 +497,110 @@ functions = {
             {
                 'direction': 'out',
                 'name': 'sampsPerChan',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+
+            }
+        ],
+        'returns': 'int32',
+    },
+    # int32 __CFUNC     DAQmxWriteAnalogF64
+    # (TaskHandle taskHandle, int32 numSampsPerChan, bool32 autoStart, float64 timeout, bool32 dataLayout,
+    # const float64 writeArray[], int32 *sampsPerChanWritten, bool32 *reserved);
+    'WriteAnalogF64': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'autoStart',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'dataLayout',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'writeArray',
+                'type': 'const float64*',
+                'grpc_type': 'repeated double',
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChanWritten',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+
+            }
+        ],
+        'returns': 'int32',
+    },
+    'WriteAnalogF64StreamCustom': {
+        'cname': 'DAQmxWriteAnalogF64Stream',
+        'codegen_method': 'CustomCode',
+        'stream_in': True,
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'autoStart',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'dataLayout',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'writeArray',
+                'type': 'const float64*',
+                'grpc_type': 'repeated double',
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChanWritten',
                 'type': 'int32'
             },
             {
