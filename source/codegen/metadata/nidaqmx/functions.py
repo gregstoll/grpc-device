@@ -51,9 +51,9 @@ functions = {
         ],
         'returns': 'int32',
     },
-    #int32 __CFUNC     DAQmxCreateAIVoltageChan       
-    # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[], 
-    # int32 terminalConfig, float64 minVal, float64 maxVal, int32 units, 
+    # int32 __CFUNC     DAQmxCreateAIVoltageChan
+    # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[],
+    # int32 terminalConfig, float64 minVal, float64 maxVal, int32 units,
     # const char customScaleName[]);
     'CreateAIVoltageChan': {
         'parameters': [
@@ -104,10 +104,10 @@ functions = {
         ],
         'returns': 'int32'
     },
-    # int32 __CFUNC_C   DAQmxGetChanAttribute         
+    # int32 __CFUNC_C   DAQmxGetChanAttribute
     #  (TaskHandle taskHandle, const char channel[], int32 attribute, void *value, ...);
     'GetChanAttributeU32': {
-        'cname' : 'DAQmxGetChanAttribute',
+        'cname': 'DAQmxGetChanAttribute',
         'parameters': [
             {
                 'direction': 'in',
@@ -125,6 +125,7 @@ functions = {
                 'direction': 'in',
                 'name': 'attribute',
                 'type': 'int32',
+                'enum': 'ChannelAttributes'
             },
             {
                 'direction': 'out',
@@ -136,7 +137,7 @@ functions = {
         'returns': 'int32'
     },
     'SetChanAttributeU32': {
-        'cname' : 'DAQmxSetChanAttribute',
+        'cname': 'DAQmxSetChanAttribute',
         'parameters': [
             {
                 'direction': 'in',
@@ -154,6 +155,7 @@ functions = {
                 'direction': 'in',
                 'name': 'attribute',
                 'type': 'int32',
+                'enum': 'ChannelAttributes'
             },
             {
                 'direction': 'in',
@@ -165,7 +167,7 @@ functions = {
         'returns': 'int32'
     },
     'GetChanAttributeF64': {
-        'cname' : 'DAQmxGetChanAttribute',
+        'cname': 'DAQmxGetChanAttribute',
         'parameters': [
             {
                 'direction': 'in',
@@ -183,6 +185,7 @@ functions = {
                 'direction': 'in',
                 'name': 'attribute',
                 'type': 'int32',
+                'enum': 'ChannelAttributes'
             },
             {
                 'direction': 'out',
@@ -193,7 +196,7 @@ functions = {
         'returns': 'int32'
     },
     'SetChanAttributeF64': {
-        'cname' : 'DAQmxSetChanAttribute',
+        'cname': 'DAQmxSetChanAttribute',
         'parameters': [
             {
                 'direction': 'in',
@@ -211,6 +214,7 @@ functions = {
                 'direction': 'in',
                 'name': 'attribute',
                 'type': 'int32',
+                'enum': 'ChannelAttributes'
             },
             {
                 'direction': 'in',
@@ -221,7 +225,7 @@ functions = {
         'returns': 'int32'
     },
     'GetChanAttributeStr': {
-        'cname' : 'DAQmxGetChanAttribute',
+        'cname': 'DAQmxGetChanAttribute',
         'parameters': [
             {
                 'direction': 'in',
@@ -239,6 +243,7 @@ functions = {
                 'direction': 'in',
                 'name': 'attribute',
                 'type': 'int32',
+                'enum': 'ChannelAttributes'
             },
             {
                 'direction': 'out',
@@ -259,7 +264,7 @@ functions = {
         'returns': 'int32'
     },
     'SetChanAttributeStr': {
-        'cname' : 'DAQmxSetChanAttribute',
+        'cname': 'DAQmxSetChanAttribute',
         'parameters': [
             {
                 'direction': 'in',
@@ -277,6 +282,7 @@ functions = {
                 'direction': 'in',
                 'name': 'attribute',
                 'type': 'int32',
+                'enum': 'ChannelAttributes'
             },
             {
                 'direction': 'in',
@@ -287,9 +293,9 @@ functions = {
         ],
         'returns': 'int32'
     },
-# int32 __CFUNC     DAQmxReadAnalogF64             
-# (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode, 
-# float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    # int32 __CFUNC     DAQmxReadAnalogF64
+    # (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode,
+    # float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
     'ReadAnalogF64': {
         'parameters': [
             {
@@ -344,7 +350,7 @@ functions = {
         'returns': 'int32',
     },
     'ReadAnalogF64StreamCodegen': {
-        'cname' : 'DAQmxReadAnalogF64',
+        'cname': 'DAQmxReadAnalogF64',
         'stream': True,
         'parameters': [
             {
@@ -400,7 +406,7 @@ functions = {
         'returns': 'int32',
     },
     'ReadAnalogF64StreamCustom': {
-        'cname' : 'DAQmxReadAnalogF64',
+        'cname': 'DAQmxReadAnalogF64',
         'codegen_method': 'CustomCode',
         'stream': True,
         'parameters': [

@@ -147,7 +147,19 @@ namespace nidaqmx_grpc {
       auto task_grpc_session = request->task();
       auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
-      int32 attribute = request->attribute();
+      int32 attribute;
+      switch (request->attribute_enum_case()) {
+        case nidaqmx_grpc::GetChanAttributeU32Request::AttributeEnumCase::kAttribute:
+          attribute = (int32)request->attribute();
+          break;
+        case nidaqmx_grpc::GetChanAttributeU32Request::AttributeEnumCase::kAttributeRaw:
+          attribute = (int32)request->attribute_raw();
+          break;
+        case nidaqmx_grpc::GetChanAttributeU32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+          return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
+          break;
+      }
+
       uInt32 value {};
       auto status = library_->GetChanAttributeU32(task, channel, attribute, &value);
       response->set_status(status);
@@ -172,7 +184,19 @@ namespace nidaqmx_grpc {
       auto task_grpc_session = request->task();
       auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
-      int32 attribute = request->attribute();
+      int32 attribute;
+      switch (request->attribute_enum_case()) {
+        case nidaqmx_grpc::SetChanAttributeU32Request::AttributeEnumCase::kAttribute:
+          attribute = (int32)request->attribute();
+          break;
+        case nidaqmx_grpc::SetChanAttributeU32Request::AttributeEnumCase::kAttributeRaw:
+          attribute = (int32)request->attribute_raw();
+          break;
+        case nidaqmx_grpc::SetChanAttributeU32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+          return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
+          break;
+      }
+
       uInt32 value = request->value();
       auto status = library_->SetChanAttributeU32(task, channel, attribute, value);
       response->set_status(status);
@@ -194,7 +218,19 @@ namespace nidaqmx_grpc {
       auto task_grpc_session = request->task();
       auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
-      int32 attribute = request->attribute();
+      int32 attribute;
+      switch (request->attribute_enum_case()) {
+        case nidaqmx_grpc::GetChanAttributeF64Request::AttributeEnumCase::kAttribute:
+          attribute = (int32)request->attribute();
+          break;
+        case nidaqmx_grpc::GetChanAttributeF64Request::AttributeEnumCase::kAttributeRaw:
+          attribute = (int32)request->attribute_raw();
+          break;
+        case nidaqmx_grpc::GetChanAttributeF64Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+          return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
+          break;
+      }
+
       double value {};
       auto status = library_->GetChanAttributeF64(task, channel, attribute, &value);
       response->set_status(status);
@@ -219,7 +255,19 @@ namespace nidaqmx_grpc {
       auto task_grpc_session = request->task();
       auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
-      int32 attribute = request->attribute();
+      int32 attribute;
+      switch (request->attribute_enum_case()) {
+        case nidaqmx_grpc::SetChanAttributeF64Request::AttributeEnumCase::kAttribute:
+          attribute = (int32)request->attribute();
+          break;
+        case nidaqmx_grpc::SetChanAttributeF64Request::AttributeEnumCase::kAttributeRaw:
+          attribute = (int32)request->attribute_raw();
+          break;
+        case nidaqmx_grpc::SetChanAttributeF64Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+          return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
+          break;
+      }
+
       double value = request->value();
       auto status = library_->SetChanAttributeF64(task, channel, attribute, value);
       response->set_status(status);
@@ -241,7 +289,19 @@ namespace nidaqmx_grpc {
       auto task_grpc_session = request->task();
       auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
-      int32 attribute = request->attribute();
+      int32 attribute;
+      switch (request->attribute_enum_case()) {
+        case nidaqmx_grpc::GetChanAttributeStrRequest::AttributeEnumCase::kAttribute:
+          attribute = (int32)request->attribute();
+          break;
+        case nidaqmx_grpc::GetChanAttributeStrRequest::AttributeEnumCase::kAttributeRaw:
+          attribute = (int32)request->attribute_raw();
+          break;
+        case nidaqmx_grpc::GetChanAttributeStrRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+          return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
+          break;
+      }
+
       int32 size = request->size();
       std::string value;
       if (size > 0) {
@@ -270,7 +330,19 @@ namespace nidaqmx_grpc {
       auto task_grpc_session = request->task();
       auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
-      int32 attribute = request->attribute();
+      int32 attribute;
+      switch (request->attribute_enum_case()) {
+        case nidaqmx_grpc::SetChanAttributeStrRequest::AttributeEnumCase::kAttribute:
+          attribute = (int32)request->attribute();
+          break;
+        case nidaqmx_grpc::SetChanAttributeStrRequest::AttributeEnumCase::kAttributeRaw:
+          attribute = (int32)request->attribute_raw();
+          break;
+        case nidaqmx_grpc::SetChanAttributeStrRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+          return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
+          break;
+      }
+
       const char* value = request->value().c_str();
       auto status = library_->SetChanAttributeStr(task, channel, attribute, value);
       response->set_status(status);
