@@ -21,6 +21,8 @@ class NiDAQmxLibraryInterface {
   virtual int32 StopTask(TaskHandle task) = 0;
   virtual int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name) = 0;
   virtual int32 CreateAOVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name) = 0;
+  virtual int32 CreateDIChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping) = 0;
+  virtual int32 CreateDOChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping) = 0;
   virtual int32 GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value) = 0;
   virtual int32 SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value) = 0;
   virtual int32 GetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double* value) = 0;

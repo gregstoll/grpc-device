@@ -24,6 +24,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 StopTask(TaskHandle task);
   int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   int32 CreateAOVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name);
+  int32 CreateDIChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
+  int32 CreateDOChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
   int32 GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value);
   int32 SetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
   int32 GetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double* value);
@@ -44,6 +46,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using StopTaskPtr = int32 (*)(TaskHandle task);
   using CreateAIVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   using CreateAOVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name);
+  using CreateDIChanPtr = int32 (*)(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
+  using CreateDOChanPtr = int32 (*)(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
   using GetChanAttributeU32Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, uInt32* value);
   using SetChanAttributeU32Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, uInt32 value);
   using GetChanAttributeF64Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, double* value);
@@ -64,6 +68,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     StopTaskPtr StopTask;
     CreateAIVoltageChanPtr CreateAIVoltageChan;
     CreateAOVoltageChanPtr CreateAOVoltageChan;
+    CreateDIChanPtr CreateDIChan;
+    CreateDOChanPtr CreateDOChan;
     GetChanAttributeU32Ptr GetChanAttributeU32;
     SetChanAttributeU32Ptr SetChanAttributeU32;
     GetChanAttributeF64Ptr GetChanAttributeF64;

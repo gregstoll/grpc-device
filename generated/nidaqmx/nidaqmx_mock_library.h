@@ -23,6 +23,8 @@ class NiDAQmxMockLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   MOCK_METHOD(int32, StopTask, (TaskHandle task), (override));
   MOCK_METHOD(int32, CreateAIVoltageChan, (TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name), (override));
   MOCK_METHOD(int32, CreateAOVoltageChan, (TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name), (override));
+  MOCK_METHOD(int32, CreateDIChan, (TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping), (override));
+  MOCK_METHOD(int32, CreateDOChan, (TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping), (override));
   MOCK_METHOD(int32, GetChanAttributeU32, (TaskHandle task, const char* channel, int32 attribute, uInt32* value), (override));
   MOCK_METHOD(int32, SetChanAttributeU32, (TaskHandle task, const char* channel, int32 attribute, uInt32 value), (override));
   MOCK_METHOD(int32, GetChanAttributeF64, (TaskHandle task, const char* channel, int32 attribute, double* value), (override));

@@ -151,6 +151,65 @@ functions = {
         ],
         'returns': 'int32'
     },
+    # int32 __CFUNC     DAQmxCreateDIChan
+    # (TaskHandle taskHandle, const char lines[], const char nameToAssignToLines[], int32 lineGrouping);
+    'CreateDIChan': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'lines',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'name_to_assign_to_lines',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'line_grouping',
+                'type': 'int32',
+            }
+        ],
+        'returns': 'int32'
+    },
+    # int32 __CFUNC     DAQmxCreateDOChan              (TaskHandle taskHandle, const char lines[], const char nameToAssignToLines[], int32 lineGrouping);
+    'CreateDOChan': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'lines',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'name_to_assign_to_lines',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'line_grouping',
+                'type': 'int32',
+            }
+        ],
+        'returns': 'int32'
+    },
     # int32 __CFUNC_C   DAQmxGetChanAttribute
     #  (TaskHandle taskHandle, const char channel[], int32 attribute, void *value, ...);
     'GetChanAttributeU32': {

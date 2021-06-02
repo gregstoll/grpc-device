@@ -27,6 +27,8 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.StopTask = reinterpret_cast<StopTaskPtr>(shared_library_.get_function_pointer("DAQmxStopTask"));
   function_pointers_.CreateAIVoltageChan = reinterpret_cast<CreateAIVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAIVoltageChan"));
   function_pointers_.CreateAOVoltageChan = reinterpret_cast<CreateAOVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAOVoltageChan"));
+  function_pointers_.CreateDIChan = reinterpret_cast<CreateDIChanPtr>(shared_library_.get_function_pointer("DAQmxCreateDIChan"));
+  function_pointers_.CreateDOChan = reinterpret_cast<CreateDOChanPtr>(shared_library_.get_function_pointer("DAQmxCreateDOChan"));
   function_pointers_.GetChanAttributeU32 = reinterpret_cast<GetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
   function_pointers_.SetChanAttributeU32 = reinterpret_cast<SetChanAttributeU32Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
   function_pointers_.GetChanAttributeF64 = reinterpret_cast<GetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
@@ -107,6 +109,22 @@ int32 NiDAQmxLibrary::CreateAOVoltageChan(TaskHandle task, const char* physical_
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateAOVoltageChan.");
   }
   return function_pointers_.CreateAOVoltageChan(task, physical_channel, name_to_assign_to_channel, min_val, max_val, units, custom_scale_name);
+}
+
+int32 NiDAQmxLibrary::CreateDIChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping)
+{
+  if (!function_pointers_.CreateDIChan) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateDIChan.");
+  }
+  return function_pointers_.CreateDIChan(task, lines, name_to_assign_to_lines, line_grouping);
+}
+
+int32 NiDAQmxLibrary::CreateDOChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping)
+{
+  if (!function_pointers_.CreateDOChan) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateDOChan.");
+  }
+  return function_pointers_.CreateDOChan(task, lines, name_to_assign_to_lines, line_grouping);
 }
 
 int32 NiDAQmxLibrary::GetChanAttributeU32(TaskHandle task, const char* channel, int32 attribute, uInt32* value)
