@@ -60,6 +60,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 SetRealTimeAttributeString(TaskHandle task, int32 attribute, const char* value);
   int32 ReadDigitalU32(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   int32 ReadDigitalU32Stream(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  int32 ReadDigitalU16(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt16 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  int32 ReadDigitalU16Stream(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt16 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   int32 WriteDigitalU32(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const uInt32* writeArray, int32* sampsPerChanWritten, uInt64 reserved);
   int32 WriteDigitalU32Stream(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const uInt32* writeArray, int32* sampsPerChanWritten, uInt64 reserved);
   int32 ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
@@ -112,6 +114,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using SetRealTimeAttributeStringPtr = int32 (*)(TaskHandle task, int32 attribute, const char* value);
   using ReadDigitalU32Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   using ReadDigitalU32StreamPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  using ReadDigitalU16Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt16 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  using ReadDigitalU16StreamPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt16 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   using WriteDigitalU32Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const uInt32* writeArray, int32* sampsPerChanWritten, uInt64 reserved);
   using WriteDigitalU32StreamPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const uInt32* writeArray, int32* sampsPerChanWritten, uInt64 reserved);
   using ReadAnalogF64Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
@@ -164,6 +168,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     SetRealTimeAttributeStringPtr SetRealTimeAttributeString;
     ReadDigitalU32Ptr ReadDigitalU32;
     ReadDigitalU32StreamPtr ReadDigitalU32Stream;
+    ReadDigitalU16Ptr ReadDigitalU16;
+    ReadDigitalU16StreamPtr ReadDigitalU16Stream;
     WriteDigitalU32Ptr WriteDigitalU32;
     WriteDigitalU32StreamPtr WriteDigitalU32Stream;
     ReadAnalogF64Ptr ReadAnalogF64;

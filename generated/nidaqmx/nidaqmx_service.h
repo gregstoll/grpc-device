@@ -66,6 +66,8 @@ public:
   ::grpc::Status SetRealTimeAttributeString(::grpc::ServerContext* context, const SetRealTimeAttributeStringRequest* request, SetRealTimeAttributeStringResponse* response) override;
   ::grpc::Status ReadDigitalU32(::grpc::ServerContext* context, const ReadDigitalU32Request* request, ReadDigitalU32Response* response) override;
   ::grpc::Status ReadDigitalU32Stream(::grpc::ServerContext* context, const ReadDigitalU32StreamRequest* request, ::grpc::ServerWriter<ReadDigitalU32StreamResponse>* writer) override;
+  ::grpc::Status ReadDigitalU16(::grpc::ServerContext* context, const ReadDigitalU16Request* request, ReadDigitalU16Response* response) override;
+  ::grpc::Status ReadDigitalU16Stream(::grpc::ServerContext* context, const ReadDigitalU16StreamRequest* request, ::grpc::ServerWriter<ReadDigitalU16StreamResponse>* writer) override;
   ::grpc::Status WriteDigitalU32(::grpc::ServerContext* context, const WriteDigitalU32Request* request, WriteDigitalU32Response* response) override;
   ::grpc::Status WriteDigitalU32Stream(::grpc::ServerContext* context, ::grpc::ServerReader<WriteDigitalU32StreamRequest>* reader, WriteDigitalU32StreamResponse* response) override;
   ::grpc::Status ReadAnalogF64(::grpc::ServerContext* context, const ReadAnalogF64Request* request, ReadAnalogF64Response* response) override;
