@@ -62,6 +62,8 @@ service NiDAQmx {
   rpc ReadDigitalU16Stream(ReadDigitalU16StreamRequest) returns (stream ReadDigitalU16StreamResponse);
   rpc WriteDigitalU32(WriteDigitalU32Request) returns (WriteDigitalU32Response);
   rpc WriteDigitalU32Stream(stream WriteDigitalU32StreamRequest) returns (WriteDigitalU32StreamResponse);
+  rpc WriteDigitalU16(WriteDigitalU16Request) returns (WriteDigitalU16Response);
+  rpc WriteDigitalU16Stream(stream WriteDigitalU16StreamRequest) returns (WriteDigitalU16StreamResponse);
   rpc ReadAnalogF64(ReadAnalogF64Request) returns (ReadAnalogF64Response);
   rpc ReadAnalogF64StreamCodegen(ReadAnalogF64StreamCodegenRequest) returns (stream ReadAnalogF64StreamCodegenResponse);
   rpc ReadAnalogF64StreamCustom(ReadAnalogF64StreamCustomRequest) returns (stream ReadAnalogF64StreamCustomResponse);
@@ -1301,6 +1303,36 @@ message WriteDigitalU32StreamRequest {
 }
 
 message WriteDigitalU32StreamResponse {
+  int32 status = 1;
+  int32 samps_per_chan_written = 2;
+}
+
+message WriteDigitalU16Request {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  int32 auto_start = 3;
+  double timeout = 4;
+  int32 data_layout = 5;
+  bytes write_array = 6;
+  uint64 reserved = 7;
+}
+
+message WriteDigitalU16Response {
+  int32 status = 1;
+  int32 samps_per_chan_written = 2;
+}
+
+message WriteDigitalU16StreamRequest {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  int32 auto_start = 3;
+  double timeout = 4;
+  int32 data_layout = 5;
+  bytes write_array = 6;
+  uint64 reserved = 7;
+}
+
+message WriteDigitalU16StreamResponse {
   int32 status = 1;
   int32 samps_per_chan_written = 2;
 }

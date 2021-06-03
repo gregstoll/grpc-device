@@ -1456,6 +1456,108 @@ functions = {
         ],
         'returns': 'int32',
     },
+    'WriteDigitalU16': {
+        'codegen_method': 'CustomCode',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'autoStart',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'dataLayout',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'writeArray',
+                'type': 'const uInt16*',
+                'grpc_type': 'bytes',
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChanWritten',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+
+            }
+        ],
+        'returns': 'int32',
+    },
+    'WriteDigitalU16Stream': {
+        'stream_in': True,
+        'cname': 'DAQmxWriteDigitalU16',
+        'codegen_method': 'CustomCode',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'autoStart',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'dataLayout',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'writeArray',
+                'type': 'const uInt16*',
+                'grpc_type': 'bytes',
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChanWritten',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+
+            }
+        ],
+        'returns': 'int32',
+    },
     # int32 __CFUNC     DAQmxReadAnalogF64
     # (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout, bool32 fillMode,
     # float64 readArray[], uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);

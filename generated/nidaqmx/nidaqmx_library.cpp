@@ -67,6 +67,8 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.ReadDigitalU16Stream = reinterpret_cast<ReadDigitalU16StreamPtr>(shared_library_.get_function_pointer("DAQmxReadDigitalU16"));
   function_pointers_.WriteDigitalU32 = reinterpret_cast<WriteDigitalU32Ptr>(shared_library_.get_function_pointer("DAQmxWriteDigitalU32"));
   function_pointers_.WriteDigitalU32Stream = reinterpret_cast<WriteDigitalU32StreamPtr>(shared_library_.get_function_pointer("DAQmxWriteDigitalU32"));
+  function_pointers_.WriteDigitalU16 = reinterpret_cast<WriteDigitalU16Ptr>(shared_library_.get_function_pointer("DAQmxWriteDigitalU16"));
+  function_pointers_.WriteDigitalU16Stream = reinterpret_cast<WriteDigitalU16StreamPtr>(shared_library_.get_function_pointer("DAQmxWriteDigitalU16"));
   function_pointers_.ReadAnalogF64 = reinterpret_cast<ReadAnalogF64Ptr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.ReadAnalogF64StreamCodegen = reinterpret_cast<ReadAnalogF64StreamCodegenPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.ReadAnalogF64StreamCustom = reinterpret_cast<ReadAnalogF64StreamCustomPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
@@ -461,6 +463,22 @@ int32 NiDAQmxLibrary::WriteDigitalU32Stream(TaskHandle task, int32 numSampsPerCh
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxWriteDigitalU32.");
   }
   return function_pointers_.WriteDigitalU32Stream(task, numSampsPerChan, autoStart, timeout, dataLayout, writeArray, sampsPerChanWritten, reserved);
+}
+
+int32 NiDAQmxLibrary::WriteDigitalU16(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const uInt16* writeArray, int32* sampsPerChanWritten, uInt64 reserved)
+{
+  if (!function_pointers_.WriteDigitalU16) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxWriteDigitalU16.");
+  }
+  return function_pointers_.WriteDigitalU16(task, numSampsPerChan, autoStart, timeout, dataLayout, writeArray, sampsPerChanWritten, reserved);
+}
+
+int32 NiDAQmxLibrary::WriteDigitalU16Stream(TaskHandle task, int32 numSampsPerChan, int32 autoStart, double timeout, int32 dataLayout, const uInt16* writeArray, int32* sampsPerChanWritten, uInt64 reserved)
+{
+  if (!function_pointers_.WriteDigitalU16Stream) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxWriteDigitalU16.");
+  }
+  return function_pointers_.WriteDigitalU16Stream(task, numSampsPerChan, autoStart, timeout, dataLayout, writeArray, sampsPerChanWritten, reserved);
 }
 
 int32 NiDAQmxLibrary::ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved)

@@ -70,6 +70,8 @@ public:
   ::grpc::Status ReadDigitalU16Stream(::grpc::ServerContext* context, const ReadDigitalU16StreamRequest* request, ::grpc::ServerWriter<ReadDigitalU16StreamResponse>* writer) override;
   ::grpc::Status WriteDigitalU32(::grpc::ServerContext* context, const WriteDigitalU32Request* request, WriteDigitalU32Response* response) override;
   ::grpc::Status WriteDigitalU32Stream(::grpc::ServerContext* context, ::grpc::ServerReader<WriteDigitalU32StreamRequest>* reader, WriteDigitalU32StreamResponse* response) override;
+  ::grpc::Status WriteDigitalU16(::grpc::ServerContext* context, const WriteDigitalU16Request* request, WriteDigitalU16Response* response) override;
+  ::grpc::Status WriteDigitalU16Stream(::grpc::ServerContext* context, ::grpc::ServerReader<WriteDigitalU16StreamRequest>* reader, WriteDigitalU16StreamResponse* response) override;
   ::grpc::Status ReadAnalogF64(::grpc::ServerContext* context, const ReadAnalogF64Request* request, ReadAnalogF64Response* response) override;
   ::grpc::Status ReadAnalogF64StreamCodegen(::grpc::ServerContext* context, const ReadAnalogF64StreamCodegenRequest* request, ::grpc::ServerWriter<ReadAnalogF64StreamCodegenResponse>* writer) override;
   ::grpc::Status ReadAnalogF64StreamCustom(::grpc::ServerContext* context, const ReadAnalogF64StreamCustomRequest* request, ::grpc::ServerWriter<ReadAnalogF64StreamCustomResponse>* writer) override;
