@@ -32,6 +32,7 @@ service NiDAQmx {
   rpc SetChanAttributeStr(SetChanAttributeStrRequest) returns (SetChanAttributeStrResponse);
   rpc ReadDigitalU32(ReadDigitalU32Request) returns (ReadDigitalU32Response);
   rpc ReadDigitalU32Stream(ReadDigitalU32StreamRequest) returns (stream ReadDigitalU32StreamResponse);
+  rpc WriteDigitalU32(WriteDigitalU32Request) returns (WriteDigitalU32Response);
   rpc ReadAnalogF64(ReadAnalogF64Request) returns (ReadAnalogF64Response);
   rpc ReadAnalogF64StreamCodegen(ReadAnalogF64StreamCodegenRequest) returns (stream ReadAnalogF64StreamCodegenResponse);
   rpc ReadAnalogF64StreamCustom(ReadAnalogF64StreamCustomRequest) returns (stream ReadAnalogF64StreamCustomResponse);
@@ -806,6 +807,21 @@ message ReadDigitalU32StreamResponse {
   int32 status = 1;
   repeated uint32 read_array = 2;
   int32 samps_per_chan = 3;
+}
+
+message WriteDigitalU32Request {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  int32 auto_start = 3;
+  double timeout = 4;
+  int32 data_layout = 5;
+  repeated uint32 write_array = 6;
+  uint64 reserved = 7;
+}
+
+message WriteDigitalU32Response {
+  int32 status = 1;
+  int32 samps_per_chan_written = 2;
 }
 
 message ReadAnalogF64Request {

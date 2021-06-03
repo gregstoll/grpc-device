@@ -187,8 +187,8 @@ ${initialize_standard_input_param(function_name, parameter)}\
       ${c_type} ${parameter_name} = ${request_snippet}.c_str();\
 % elif c_type == 'ViString' or c_type == 'ViRsrc':
       ${c_type} ${parameter_name} = (${c_type})${request_snippet}.c_str();\
-% elif c_type == 'ViInt8[]' or c_type == 'ViChar[]':
-      ${c_type_pointer} ${parameter_name} = (${c_type[:-2]}*)${request_snippet}.c_str();\
+% elif c_type in ['ViInt8[]', 'ViChar[]']:
+      ${c_type_pointer} ${parameter_name} = (${c_type_pointer})${request_snippet}.c_str();\
 % elif c_type == 'ViBoolean[]':
       auto ${parameter_name}_request = ${request_snippet};
       std::vector<${c_type_underlying_type}> ${parameter_name};
@@ -217,6 +217,8 @@ one_of_case_prefix = f'{namespace_prefix}{function_name}Request::{PascalFieldNam
       auto ${parameter_name} = session_repository_.access_session(${parameter_name}_grpc_session.id(), ${parameter_name}_grpc_session.name());\
 % elif c_type == 'ViInt32[]' or c_type == 'ViAddr[]':
       auto ${parameter_name} = const_cast<${c_type_pointer}>(reinterpret_cast<const ${c_type_pointer}>(${request_snippet}.data()));\
+%elif c_type == 'const uInt32*':
+      auto ${parameter_name} = reinterpret_cast<${c_type}>(${request_snippet}.data());\
 %elif common_helpers.is_const_ptr(c_type):
       auto ${parameter_name} = ${request_snippet}.data();\
 % elif common_helpers.is_array(c_type):
