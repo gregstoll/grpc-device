@@ -217,6 +217,98 @@ namespace nidaqmx_grpc {
 
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::CreateCIPulseChanFreq(::grpc::ServerContext* context, const CreateCIPulseChanFreqRequest* request, CreateCIPulseChanFreqResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* counter = request->counter().c_str();
+      const char* name_to_assign_to_channel = request->name_to_assign_to_channel().c_str();
+      double min_val = request->min_val();
+      double max_val = request->max_val();
+      int32 units = request->units();
+      auto status = library_->CreateCIPulseChanFreq(task, counter, name_to_assign_to_channel, min_val, max_val, units);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::ReadCtrFreq(::grpc::ServerContext* context, const ReadCtrFreqRequest* request, ReadCtrFreqResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      int32 num_samps_per_chan = request->num_samps_per_chan();
+      double timeout = request->timeout();
+      int32 interleaved = request->interleaved();
+      uInt32 array_size_in_samps = request->array_size_in_samps();
+      uInt64 reserved = request->reserved();
+      response->mutable_read_array_frequency()->Resize(array_size_in_samps, 0);
+      float64* read_array_frequency = response->mutable_read_array_frequency()->mutable_data();
+      response->mutable_read_array_duty_cycle()->Resize(array_size_in_samps, 0);
+      float64* read_array_duty_cycle = response->mutable_read_array_duty_cycle()->mutable_data();
+      int32 samps_per_chan_read {};
+      auto status = library_->ReadCtrFreq(task, num_samps_per_chan, timeout, interleaved, read_array_frequency, read_array_duty_cycle, array_size_in_samps, &samps_per_chan_read, reserved);
+      response->set_status(status);
+      if (status == 0) {
+        response->set_samps_per_chan_read(samps_per_chan_read);
+      }
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::ReadCtrFreqStream(::grpc::ServerContext* context, const ReadCtrFreqStreamRequest* request, ::grpc::ServerWriter<ReadCtrFreqStreamResponse>* writer)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      ReadCtrFreqStreamResponse localResponse;
+      auto response = &localResponse;
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      int32 num_samps_per_chan = request->num_samps_per_chan();
+      double timeout = request->timeout();
+      int32 interleaved = request->interleaved();
+      uInt32 array_size_in_samps = request->array_size_in_samps();
+      uInt64 reserved = request->reserved();
+      response->mutable_read_array_frequency()->Resize(array_size_in_samps, 0);
+      float64* read_array_frequency = response->mutable_read_array_frequency()->mutable_data();
+      response->mutable_read_array_duty_cycle()->Resize(array_size_in_samps, 0);
+      float64* read_array_duty_cycle = response->mutable_read_array_duty_cycle()->mutable_data();
+      int32 samps_per_chan_read {};
+      do {
+        auto status = library_->ReadCtrFreqStream(task, num_samps_per_chan, timeout, interleaved, read_array_frequency, read_array_duty_cycle, array_size_in_samps, &samps_per_chan_read, reserved);
+        response->set_status(status);
+        if (status == 0) {
+          response->set_samps_per_chan_read(samps_per_chan_read);
+        }
+      } while (writer->Write(localResponse));
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
   ::grpc::Status NiDAQmxService::CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response)
   {
     if (context->IsCancelled()) {

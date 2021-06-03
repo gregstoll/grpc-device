@@ -27,6 +27,9 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 ConnectTerms(const char* source_terminal, const char* destination_terminal);
   int32 DisconnectTerms(const char* source_terminal, const char* destination_terminal);
   int32 CfgDigEdgeStartTrig(TaskHandle task, const char* trigger_source, int32 trigger_edge);
+  int32 CreateCIPulseChanFreq(TaskHandle task, const char* counter, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units);
+  int32 ReadCtrFreq(TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved);
+  int32 ReadCtrFreqStream(TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved);
   int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   int32 CreateAOVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name);
   int32 CreateDIChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
@@ -58,6 +61,9 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using ConnectTermsPtr = int32 (*)(const char* source_terminal, const char* destination_terminal);
   using DisconnectTermsPtr = int32 (*)(const char* source_terminal, const char* destination_terminal);
   using CfgDigEdgeStartTrigPtr = int32 (*)(TaskHandle task, const char* trigger_source, int32 trigger_edge);
+  using CreateCIPulseChanFreqPtr = int32 (*)(TaskHandle task, const char* counter, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units);
+  using ReadCtrFreqPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved);
+  using ReadCtrFreqStreamPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved);
   using CreateAIVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   using CreateAOVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name);
   using CreateDIChanPtr = int32 (*)(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
@@ -89,6 +95,9 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     ConnectTermsPtr ConnectTerms;
     DisconnectTermsPtr DisconnectTerms;
     CfgDigEdgeStartTrigPtr CfgDigEdgeStartTrig;
+    CreateCIPulseChanFreqPtr CreateCIPulseChanFreq;
+    ReadCtrFreqPtr ReadCtrFreq;
+    ReadCtrFreqStreamPtr ReadCtrFreqStream;
     CreateAIVoltageChanPtr CreateAIVoltageChan;
     CreateAOVoltageChanPtr CreateAOVoltageChan;
     CreateDIChanPtr CreateDIChan;

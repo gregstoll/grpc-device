@@ -30,6 +30,9 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.ConnectTerms = reinterpret_cast<ConnectTermsPtr>(shared_library_.get_function_pointer("DAQmxConnectTerms"));
   function_pointers_.DisconnectTerms = reinterpret_cast<DisconnectTermsPtr>(shared_library_.get_function_pointer("DAQmxDisconnectTerms"));
   function_pointers_.CfgDigEdgeStartTrig = reinterpret_cast<CfgDigEdgeStartTrigPtr>(shared_library_.get_function_pointer("DAQmxCfgDigEdgeStartTrig"));
+  function_pointers_.CreateCIPulseChanFreq = reinterpret_cast<CreateCIPulseChanFreqPtr>(shared_library_.get_function_pointer("DAQmxCreateCIPulseChanFreq"));
+  function_pointers_.ReadCtrFreq = reinterpret_cast<ReadCtrFreqPtr>(shared_library_.get_function_pointer("DAQmxReadCtrFreq"));
+  function_pointers_.ReadCtrFreqStream = reinterpret_cast<ReadCtrFreqStreamPtr>(shared_library_.get_function_pointer("DAQmxReadCtrFreq"));
   function_pointers_.CreateAIVoltageChan = reinterpret_cast<CreateAIVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAIVoltageChan"));
   function_pointers_.CreateAOVoltageChan = reinterpret_cast<CreateAOVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAOVoltageChan"));
   function_pointers_.CreateDIChan = reinterpret_cast<CreateDIChanPtr>(shared_library_.get_function_pointer("DAQmxCreateDIChan"));
@@ -142,6 +145,30 @@ int32 NiDAQmxLibrary::CfgDigEdgeStartTrig(TaskHandle task, const char* trigger_s
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCfgDigEdgeStartTrig.");
   }
   return function_pointers_.CfgDigEdgeStartTrig(task, trigger_source, trigger_edge);
+}
+
+int32 NiDAQmxLibrary::CreateCIPulseChanFreq(TaskHandle task, const char* counter, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units)
+{
+  if (!function_pointers_.CreateCIPulseChanFreq) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCreateCIPulseChanFreq.");
+  }
+  return function_pointers_.CreateCIPulseChanFreq(task, counter, name_to_assign_to_channel, min_val, max_val, units);
+}
+
+int32 NiDAQmxLibrary::ReadCtrFreq(TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved)
+{
+  if (!function_pointers_.ReadCtrFreq) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadCtrFreq.");
+  }
+  return function_pointers_.ReadCtrFreq(task, numSampsPerChan, timeout, interleaved, readArrayFrequency, readArrayDutyCycle, arraySizeInSamps, sampsPerChanRead, reserved);
+}
+
+int32 NiDAQmxLibrary::ReadCtrFreqStream(TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved)
+{
+  if (!function_pointers_.ReadCtrFreqStream) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadCtrFreq.");
+  }
+  return function_pointers_.ReadCtrFreqStream(task, numSampsPerChan, timeout, interleaved, readArrayFrequency, readArrayDutyCycle, arraySizeInSamps, sampsPerChanRead, reserved);
 }
 
 int32 NiDAQmxLibrary::CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name)

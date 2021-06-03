@@ -33,6 +33,9 @@ public:
   ::grpc::Status ConnectTerms(::grpc::ServerContext* context, const ConnectTermsRequest* request, ConnectTermsResponse* response) override;
   ::grpc::Status DisconnectTerms(::grpc::ServerContext* context, const DisconnectTermsRequest* request, DisconnectTermsResponse* response) override;
   ::grpc::Status CfgDigEdgeStartTrig(::grpc::ServerContext* context, const CfgDigEdgeStartTrigRequest* request, CfgDigEdgeStartTrigResponse* response) override;
+  ::grpc::Status CreateCIPulseChanFreq(::grpc::ServerContext* context, const CreateCIPulseChanFreqRequest* request, CreateCIPulseChanFreqResponse* response) override;
+  ::grpc::Status ReadCtrFreq(::grpc::ServerContext* context, const ReadCtrFreqRequest* request, ReadCtrFreqResponse* response) override;
+  ::grpc::Status ReadCtrFreqStream(::grpc::ServerContext* context, const ReadCtrFreqStreamRequest* request, ::grpc::ServerWriter<ReadCtrFreqStreamResponse>* writer) override;
   ::grpc::Status CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response) override;
   ::grpc::Status CreateAOVoltageChan(::grpc::ServerContext* context, const CreateAOVoltageChanRequest* request, CreateAOVoltageChanResponse* response) override;
   ::grpc::Status CreateDIChan(::grpc::ServerContext* context, const CreateDIChanRequest* request, CreateDIChanResponse* response) override;

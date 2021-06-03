@@ -25,6 +25,9 @@ service NiDAQmx {
   rpc ConnectTerms(ConnectTermsRequest) returns (ConnectTermsResponse);
   rpc DisconnectTerms(DisconnectTermsRequest) returns (DisconnectTermsResponse);
   rpc CfgDigEdgeStartTrig(CfgDigEdgeStartTrigRequest) returns (CfgDigEdgeStartTrigResponse);
+  rpc CreateCIPulseChanFreq(CreateCIPulseChanFreqRequest) returns (CreateCIPulseChanFreqResponse);
+  rpc ReadCtrFreq(ReadCtrFreqRequest) returns (ReadCtrFreqResponse);
+  rpc ReadCtrFreqStream(ReadCtrFreqStreamRequest) returns (stream ReadCtrFreqStreamResponse);
   rpc CreateAIVoltageChan(CreateAIVoltageChanRequest) returns (CreateAIVoltageChanResponse);
   rpc CreateAOVoltageChan(CreateAOVoltageChanRequest) returns (CreateAOVoltageChanResponse);
   rpc CreateDIChan(CreateDIChanRequest) returns (CreateDIChanResponse);
@@ -694,6 +697,51 @@ message CfgDigEdgeStartTrigRequest {
 
 message CfgDigEdgeStartTrigResponse {
   int32 status = 1;
+}
+
+message CreateCIPulseChanFreqRequest {
+  nidevice_grpc.Session task = 1;
+  string counter = 2;
+  string name_to_assign_to_channel = 3;
+  double min_val = 4;
+  double max_val = 5;
+  int32 units = 6;
+}
+
+message CreateCIPulseChanFreqResponse {
+  int32 status = 1;
+}
+
+message ReadCtrFreqRequest {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  double timeout = 3;
+  int32 interleaved = 4;
+  uint32 array_size_in_samps = 5;
+  uint64 reserved = 6;
+}
+
+message ReadCtrFreqResponse {
+  int32 status = 1;
+  repeated double read_array_frequency = 2;
+  repeated double read_array_duty_cycle = 3;
+  int32 samps_per_chan_read = 4;
+}
+
+message ReadCtrFreqStreamRequest {
+  nidevice_grpc.Session task = 1;
+  int32 num_samps_per_chan = 2;
+  double timeout = 3;
+  int32 interleaved = 4;
+  uint32 array_size_in_samps = 5;
+  uint64 reserved = 6;
+}
+
+message ReadCtrFreqStreamResponse {
+  int32 status = 1;
+  repeated double read_array_frequency = 2;
+  repeated double read_array_duty_cycle = 3;
+  int32 samps_per_chan_read = 4;
 }
 
 message CreateAIVoltageChanRequest {

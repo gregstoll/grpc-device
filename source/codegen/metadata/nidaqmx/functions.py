@@ -160,6 +160,179 @@ functions = {
         ],
         'returns': 'int32'
     },
+    # int32 __CFUNC     DAQmxCreateCIPulseChanFreq
+    # (TaskHandle taskHandle, const char counter[], const char nameToAssignToChannel[],
+    # float64 minVal, float64 maxVal, int32 units);
+    'CreateCIPulseChanFreq': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'counter',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'name_to_assign_to_channel',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'min_val',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'max_val',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'units',
+                'type': 'int32',
+            }
+        ],
+        'returns': 'int32'
+    },
+    # int32 __CFUNC     DAQmxReadCtrFreq
+    # (TaskHandle taskHandle, int32 numSampsPerChan, float64 timeout,
+    # bool32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[],
+    # uInt32 arraySizeInSamps, int32 *sampsPerChanRead, bool32 *reserved);
+    'ReadCtrFreq': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'interleaved',
+                'type': 'int32',
+            },
+            {
+                'direction': 'out',
+                'name': 'readArrayFrequency',
+                'type': 'float64[]',
+                'grpc_type': 'repeated double',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'arraySizeInSamps'
+                }
+            },
+            {
+                'direction': 'out',
+                'name': 'readArrayDutyCycle',
+                'type': 'float64[]',
+                'grpc_type': 'repeated double',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'arraySizeInSamps'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'arraySizeInSamps',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChanRead',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+            }
+        ],
+        'returns': 'int32',
+    },
+    'ReadCtrFreqStream': {
+        'cname': 'DAQmxReadCtrFreq',
+        'stream_out': True,
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'numSampsPerChan',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'timeout',
+                'type': 'double',
+            },
+            {
+                'direction': 'in',
+                'name': 'interleaved',
+                'type': 'int32',
+            },
+            {
+                'direction': 'out',
+                'name': 'readArrayFrequency',
+                'type': 'float64[]',
+                'grpc_type': 'repeated double',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'arraySizeInSamps'
+                }
+            },
+            {
+                'direction': 'out',
+                'name': 'readArrayDutyCycle',
+                'type': 'float64[]',
+                'grpc_type': 'repeated double',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'arraySizeInSamps'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'arraySizeInSamps',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+            {
+                'direction': 'out',
+                'name': 'sampsPerChanRead',
+                'type': 'int32'
+            },
+            {
+                'direction': 'in',
+                'name': 'reserved',
+                'type': 'uInt64',
+                'grpc_type': 'uint64',
+            }
+        ],
+        'returns': 'int32',
+    },
     # int32 __CFUNC     DAQmxCreateAIVoltageChan
     # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[],
     # int32 terminalConfig, float64 minVal, float64 maxVal, int32 units,

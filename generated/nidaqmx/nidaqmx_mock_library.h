@@ -26,6 +26,9 @@ class NiDAQmxMockLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   MOCK_METHOD(int32, ConnectTerms, (const char* source_terminal, const char* destination_terminal), (override));
   MOCK_METHOD(int32, DisconnectTerms, (const char* source_terminal, const char* destination_terminal), (override));
   MOCK_METHOD(int32, CfgDigEdgeStartTrig, (TaskHandle task, const char* trigger_source, int32 trigger_edge), (override));
+  MOCK_METHOD(int32, CreateCIPulseChanFreq, (TaskHandle task, const char* counter, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units), (override));
+  MOCK_METHOD(int32, ReadCtrFreq, (TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved), (override));
+  MOCK_METHOD(int32, ReadCtrFreqStream, (TaskHandle task, int32 numSampsPerChan, double timeout, int32 interleaved, float64 readArrayFrequency[], float64 readArrayDutyCycle[], uInt32 arraySizeInSamps, int32* sampsPerChanRead, uInt64 reserved), (override));
   MOCK_METHOD(int32, CreateAIVoltageChan, (TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name), (override));
   MOCK_METHOD(int32, CreateAOVoltageChan, (TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name), (override));
   MOCK_METHOD(int32, CreateDIChan, (TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping), (override));
