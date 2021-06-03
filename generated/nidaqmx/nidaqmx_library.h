@@ -23,6 +23,7 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 StartTask(TaskHandle task);
   int32 StopTask(TaskHandle task);
   int32 ExportSignal(TaskHandle task, int32 signal_id, const char* output_terminal);
+  int32 GetExtendedErrorInfo(char error_string[], int32 buffer_size);
   int32 CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   int32 CreateAOVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name);
   int32 CreateDIChan(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
@@ -50,6 +51,7 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using StartTaskPtr = int32 (*)(TaskHandle task);
   using StopTaskPtr = int32 (*)(TaskHandle task);
   using ExportSignalPtr = int32 (*)(TaskHandle task, int32 signal_id, const char* output_terminal);
+  using GetExtendedErrorInfoPtr = int32 (*)(char error_string[], int32 buffer_size);
   using CreateAIVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name);
   using CreateAOVoltageChanPtr = int32 (*)(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name);
   using CreateDIChanPtr = int32 (*)(TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping);
@@ -77,6 +79,7 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     StartTaskPtr StartTask;
     StopTaskPtr StopTask;
     ExportSignalPtr ExportSignal;
+    GetExtendedErrorInfoPtr GetExtendedErrorInfo;
     CreateAIVoltageChanPtr CreateAIVoltageChan;
     CreateAOVoltageChanPtr CreateAOVoltageChan;
     CreateDIChanPtr CreateDIChan;

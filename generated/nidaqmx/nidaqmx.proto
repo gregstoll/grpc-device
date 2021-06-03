@@ -21,6 +21,7 @@ service NiDAQmx {
   rpc StartTask(StartTaskRequest) returns (StartTaskResponse);
   rpc StopTask(StopTaskRequest) returns (StopTaskResponse);
   rpc ExportSignal(ExportSignalRequest) returns (ExportSignalResponse);
+  rpc GetExtendedErrorInfo(GetExtendedErrorInfoRequest) returns (GetExtendedErrorInfoResponse);
   rpc CreateAIVoltageChan(CreateAIVoltageChanRequest) returns (CreateAIVoltageChanResponse);
   rpc CreateAOVoltageChan(CreateAOVoltageChanRequest) returns (CreateAOVoltageChanResponse);
   rpc CreateDIChan(CreateDIChanRequest) returns (CreateDIChanResponse);
@@ -653,6 +654,15 @@ message ExportSignalRequest {
 
 message ExportSignalResponse {
   int32 status = 1;
+}
+
+message GetExtendedErrorInfoRequest {
+  int32 buffer_size = 1;
+}
+
+message GetExtendedErrorInfoResponse {
+  int32 status = 1;
+  string error_string = 2;
 }
 
 message CreateAIVoltageChanRequest {

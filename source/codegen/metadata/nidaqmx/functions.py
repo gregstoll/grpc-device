@@ -75,6 +75,28 @@ functions = {
         ],
         'returns': 'int32',
     },
+    # int32 __CFUNC     DAQmxGetExtendedErrorInfo
+    # (char errorString[], uInt32 bufferSize);
+    'GetExtendedErrorInfo': {
+        'parameters': [
+            {
+                'direction': 'out',
+                'name': 'error_string',
+                'type': 'char[]',
+                'grpc_type': 'string',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'buffer_size'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'buffer_size',
+                'type': 'int32',
+            },
+        ],
+        'returns': 'int32'
+    },
     # int32 __CFUNC     DAQmxCreateAIVoltageChan
     # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[],
     # int32 terminalConfig, float64 minVal, float64 maxVal, int32 units,
