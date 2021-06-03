@@ -20,6 +20,7 @@ service NiDAQmx {
   rpc ClearTask(ClearTaskRequest) returns (ClearTaskResponse);
   rpc StartTask(StartTaskRequest) returns (StartTaskResponse);
   rpc StopTask(StopTaskRequest) returns (StopTaskResponse);
+  rpc ExportSignal(ExportSignalRequest) returns (ExportSignalResponse);
   rpc CreateAIVoltageChan(CreateAIVoltageChanRequest) returns (CreateAIVoltageChanResponse);
   rpc CreateAOVoltageChan(CreateAOVoltageChanRequest) returns (CreateAOVoltageChanResponse);
   rpc CreateDIChan(CreateDIChanRequest) returns (CreateDIChanResponse);
@@ -641,6 +642,16 @@ message StopTaskRequest {
 }
 
 message StopTaskResponse {
+  int32 status = 1;
+}
+
+message ExportSignalRequest {
+  nidevice_grpc.Session task = 1;
+  int32 signal_id = 2;
+  string output_terminal = 3;
+}
+
+message ExportSignalResponse {
   int32 status = 1;
 }
 

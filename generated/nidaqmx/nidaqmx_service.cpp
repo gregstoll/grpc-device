@@ -112,6 +112,27 @@ namespace nidaqmx_grpc {
 
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::ExportSignal(::grpc::ServerContext* context, const ExportSignalRequest* request, ExportSignalResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      int32 signal_id = request->signal_id();
+      const char* output_terminal = request->output_terminal().c_str();
+      auto status = library_->ExportSignal(task, signal_id, output_terminal);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
   ::grpc::Status NiDAQmxService::CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response)
   {
     if (context->IsCancelled()) {

@@ -25,6 +25,7 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.ClearTask = reinterpret_cast<ClearTaskPtr>(shared_library_.get_function_pointer("DAQmxClearTask"));
   function_pointers_.StartTask = reinterpret_cast<StartTaskPtr>(shared_library_.get_function_pointer("DAQmxStartTask"));
   function_pointers_.StopTask = reinterpret_cast<StopTaskPtr>(shared_library_.get_function_pointer("DAQmxStopTask"));
+  function_pointers_.ExportSignal = reinterpret_cast<ExportSignalPtr>(shared_library_.get_function_pointer("DAQmxExportSignal"));
   function_pointers_.CreateAIVoltageChan = reinterpret_cast<CreateAIVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAIVoltageChan"));
   function_pointers_.CreateAOVoltageChan = reinterpret_cast<CreateAOVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAOVoltageChan"));
   function_pointers_.CreateDIChan = reinterpret_cast<CreateDIChanPtr>(shared_library_.get_function_pointer("DAQmxCreateDIChan"));
@@ -97,6 +98,14 @@ int32 NiDAQmxLibrary::StopTask(TaskHandle task)
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxStopTask.");
   }
   return function_pointers_.StopTask(task);
+}
+
+int32 NiDAQmxLibrary::ExportSignal(TaskHandle task, int32 signal_id, const char* output_terminal)
+{
+  if (!function_pointers_.ExportSignal) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxExportSignal.");
+  }
+  return function_pointers_.ExportSignal(task, signal_id, output_terminal);
 }
 
 int32 NiDAQmxLibrary::CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name)

@@ -51,6 +51,30 @@ functions = {
         ],
         'returns': 'int32',
     },
+    # int32 __CFUNC     DAQmxExportSignal
+    # (TaskHandle taskHandle, int32 signalID, const char outputTerminal[]);
+    'ExportSignal': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'signal_id',
+                'type': 'int32',
+            },
+            {
+                'direction': 'in',
+                'name': 'output_terminal',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            }
+        ],
+        'returns': 'int32',
+    },
     # int32 __CFUNC     DAQmxCreateAIVoltageChan
     # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[],
     # int32 terminalConfig, float64 minVal, float64 maxVal, int32 units,
