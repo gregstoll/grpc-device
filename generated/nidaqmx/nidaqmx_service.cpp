@@ -158,6 +158,65 @@ namespace nidaqmx_grpc {
 
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::ConnectTerms(::grpc::ServerContext* context, const ConnectTermsRequest* request, ConnectTermsResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      const char* source_terminal = request->source_terminal().c_str();
+      const char* destination_terminal = request->destination_terminal().c_str();
+      auto status = library_->ConnectTerms(source_terminal, destination_terminal);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::DisconnectTerms(::grpc::ServerContext* context, const DisconnectTermsRequest* request, DisconnectTermsResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      const char* source_terminal = request->source_terminal().c_str();
+      const char* destination_terminal = request->destination_terminal().c_str();
+      auto status = library_->DisconnectTerms(source_terminal, destination_terminal);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
+  ::grpc::Status NiDAQmxService::CfgDigEdgeStartTrig(::grpc::ServerContext* context, const CfgDigEdgeStartTrigRequest* request, CfgDigEdgeStartTrigResponse* response)
+  {
+    if (context->IsCancelled()) {
+      return ::grpc::Status::CANCELLED;
+    }
+    try {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      const char* trigger_source = request->trigger_source().c_str();
+      int32 trigger_edge = request->trigger_edge();
+      auto status = library_->CfgDigEdgeStartTrig(task, trigger_source, trigger_edge);
+      response->set_status(status);
+      return ::grpc::Status::OK;
+    }
+    catch (nidevice_grpc::LibraryLoadException& ex) {
+      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+    }
+  }
+
+  //---------------------------------------------------------------------
+  //---------------------------------------------------------------------
   ::grpc::Status NiDAQmxService::CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response)
   {
     if (context->IsCancelled()) {

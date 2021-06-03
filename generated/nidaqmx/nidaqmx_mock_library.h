@@ -23,6 +23,9 @@ class NiDAQmxMockLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   MOCK_METHOD(int32, StopTask, (TaskHandle task), (override));
   MOCK_METHOD(int32, ExportSignal, (TaskHandle task, int32 signal_id, const char* output_terminal), (override));
   MOCK_METHOD(int32, GetExtendedErrorInfo, (char error_string[], int32 buffer_size), (override));
+  MOCK_METHOD(int32, ConnectTerms, (const char* source_terminal, const char* destination_terminal), (override));
+  MOCK_METHOD(int32, DisconnectTerms, (const char* source_terminal, const char* destination_terminal), (override));
+  MOCK_METHOD(int32, CfgDigEdgeStartTrig, (TaskHandle task, const char* trigger_source, int32 trigger_edge), (override));
   MOCK_METHOD(int32, CreateAIVoltageChan, (TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name), (override));
   MOCK_METHOD(int32, CreateAOVoltageChan, (TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, double min_val, double max_val, int32 units, const char* custom_scale_name), (override));
   MOCK_METHOD(int32, CreateDIChan, (TaskHandle task, const char* lines, const char* name_to_assign_to_lines, int32 line_grouping), (override));

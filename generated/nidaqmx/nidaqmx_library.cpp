@@ -27,6 +27,9 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.StopTask = reinterpret_cast<StopTaskPtr>(shared_library_.get_function_pointer("DAQmxStopTask"));
   function_pointers_.ExportSignal = reinterpret_cast<ExportSignalPtr>(shared_library_.get_function_pointer("DAQmxExportSignal"));
   function_pointers_.GetExtendedErrorInfo = reinterpret_cast<GetExtendedErrorInfoPtr>(shared_library_.get_function_pointer("DAQmxGetExtendedErrorInfo"));
+  function_pointers_.ConnectTerms = reinterpret_cast<ConnectTermsPtr>(shared_library_.get_function_pointer("DAQmxConnectTerms"));
+  function_pointers_.DisconnectTerms = reinterpret_cast<DisconnectTermsPtr>(shared_library_.get_function_pointer("DAQmxDisconnectTerms"));
+  function_pointers_.CfgDigEdgeStartTrig = reinterpret_cast<CfgDigEdgeStartTrigPtr>(shared_library_.get_function_pointer("DAQmxCfgDigEdgeStartTrig"));
   function_pointers_.CreateAIVoltageChan = reinterpret_cast<CreateAIVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAIVoltageChan"));
   function_pointers_.CreateAOVoltageChan = reinterpret_cast<CreateAOVoltageChanPtr>(shared_library_.get_function_pointer("DAQmxCreateAOVoltageChan"));
   function_pointers_.CreateDIChan = reinterpret_cast<CreateDIChanPtr>(shared_library_.get_function_pointer("DAQmxCreateDIChan"));
@@ -115,6 +118,30 @@ int32 NiDAQmxLibrary::GetExtendedErrorInfo(char error_string[], int32 buffer_siz
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxGetExtendedErrorInfo.");
   }
   return function_pointers_.GetExtendedErrorInfo(error_string, buffer_size);
+}
+
+int32 NiDAQmxLibrary::ConnectTerms(const char* source_terminal, const char* destination_terminal)
+{
+  if (!function_pointers_.ConnectTerms) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxConnectTerms.");
+  }
+  return function_pointers_.ConnectTerms(source_terminal, destination_terminal);
+}
+
+int32 NiDAQmxLibrary::DisconnectTerms(const char* source_terminal, const char* destination_terminal)
+{
+  if (!function_pointers_.DisconnectTerms) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxDisconnectTerms.");
+  }
+  return function_pointers_.DisconnectTerms(source_terminal, destination_terminal);
+}
+
+int32 NiDAQmxLibrary::CfgDigEdgeStartTrig(TaskHandle task, const char* trigger_source, int32 trigger_edge)
+{
+  if (!function_pointers_.CfgDigEdgeStartTrig) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxCfgDigEdgeStartTrig.");
+  }
+  return function_pointers_.CfgDigEdgeStartTrig(task, trigger_source, trigger_edge);
 }
 
 int32 NiDAQmxLibrary::CreateAIVoltageChan(TaskHandle task, const char* physical_channel, const char* name_to_assign_to_channel, int32 terminal_config, double min_val, double max_val, int32 units, const char* custom_scale_name)

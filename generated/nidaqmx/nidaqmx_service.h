@@ -30,6 +30,9 @@ public:
   ::grpc::Status StopTask(::grpc::ServerContext* context, const StopTaskRequest* request, StopTaskResponse* response) override;
   ::grpc::Status ExportSignal(::grpc::ServerContext* context, const ExportSignalRequest* request, ExportSignalResponse* response) override;
   ::grpc::Status GetExtendedErrorInfo(::grpc::ServerContext* context, const GetExtendedErrorInfoRequest* request, GetExtendedErrorInfoResponse* response) override;
+  ::grpc::Status ConnectTerms(::grpc::ServerContext* context, const ConnectTermsRequest* request, ConnectTermsResponse* response) override;
+  ::grpc::Status DisconnectTerms(::grpc::ServerContext* context, const DisconnectTermsRequest* request, DisconnectTermsResponse* response) override;
+  ::grpc::Status CfgDigEdgeStartTrig(::grpc::ServerContext* context, const CfgDigEdgeStartTrigRequest* request, CfgDigEdgeStartTrigResponse* response) override;
   ::grpc::Status CreateAIVoltageChan(::grpc::ServerContext* context, const CreateAIVoltageChanRequest* request, CreateAIVoltageChanResponse* response) override;
   ::grpc::Status CreateAOVoltageChan(::grpc::ServerContext* context, const CreateAOVoltageChanRequest* request, CreateAOVoltageChanResponse* response) override;
   ::grpc::Status CreateDIChan(::grpc::ServerContext* context, const CreateDIChanRequest* request, CreateDIChanResponse* response) override;

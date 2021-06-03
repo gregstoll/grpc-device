@@ -97,6 +97,69 @@ functions = {
         ],
         'returns': 'int32'
     },
+    # int32 __CFUNC     DAQmxConnectTerms
+    # (const char sourceTerminal[], const char destinationTerminal[],
+    # int32 signalModifiers);
+    'ConnectTerms': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'source_terminal',
+                'type': 'const char*',
+                'grpc_type': 'string',
+            },
+            {
+                'direction': 'in',
+                'name': 'destination_terminal',
+                'type': 'const char*',
+                'grpc_type': 'string',
+            },
+        ],
+        'returns': 'int32'
+    },
+    # int32 __CFUNC     DAQmxDisconnectTerms
+    # (const char sourceTerminal[], const char destinationTerminal[]);
+    'DisconnectTerms': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'source_terminal',
+                'type': 'const char*',
+                'grpc_type': 'string',
+            },
+            {
+                'direction': 'in',
+                'name': 'destination_terminal',
+                'type': 'const char*',
+                'grpc_type': 'string',
+            },
+        ],
+        'returns': 'int32'
+    },
+    # int32 __CFUNC     DAQmxCfgDigEdgeStartTrig
+    # (TaskHandle taskHandle, const char triggerSource[], int32 triggerEdge);
+    'CfgDigEdgeStartTrig': {
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'trigger_source',
+                'type': 'const char*',
+                'grpc_type': 'string',
+            },
+            {
+                'direction': 'in',
+                'name': 'trigger_edge',
+                'type': 'int32',
+            },
+        ],
+        'returns': 'int32'
+    },
     # int32 __CFUNC     DAQmxCreateAIVoltageChan
     # (TaskHandle taskHandle, const char physicalChannel[], const char nameToAssignToChannel[],
     # int32 terminalConfig, float64 minVal, float64 maxVal, int32 units,
