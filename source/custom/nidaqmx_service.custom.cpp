@@ -72,4 +72,37 @@ namespace nidaqmx_grpc {
   }
 }
 
+  //---------------------------------------------------------------------
+//---------------------------------------------------------------------
+::grpc::Status NiDAQmxService::WriteDigitalU32Stream(::grpc::ServerContext* context, ::grpc::ServerReader<WriteDigitalU32StreamRequest>* reader, WriteDigitalU32StreamResponse* response)
+{
+  if (context->IsCancelled()) {
+    return ::grpc::Status::CANCELLED;
+  }
+  try {
+    WriteDigitalU32StreamRequest local_request;
+    auto request = &local_request;
+    while (reader->Read(request)) {
+      auto task_grpc_session = request->task();
+      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      int32 num_samps_per_chan = request->num_samps_per_chan();
+      int32 auto_start = request->auto_start();
+      double timeout = request->timeout();
+      int32 data_layout = request->data_layout();
+      auto write_array = reinterpret_cast<const uInt32*>(request->write_array().data());
+      uInt64 reserved = request->reserved();
+      int32 samps_per_chan_written{};
+      auto status = library_->WriteDigitalU32Stream(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, reserved);
+      response->set_status(status);
+      if (status == 0) {
+        response->set_samps_per_chan_written(samps_per_chan_written);
+      }
+    }
+    return ::grpc::Status::OK;
+  }
+  catch (nidevice_grpc::LibraryLoadException& ex) {
+    return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
+  }
+}
+
 }  // namespace nidaqmx_grpc
