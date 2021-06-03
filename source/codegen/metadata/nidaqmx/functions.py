@@ -492,9 +492,7 @@ functions = {
         ],
         'returns': 'int32'
     },
-    # int32 __CFUNC_C   DAQmxGetChanAttribute
-    #  (TaskHandle taskHandle, const char channel[], int32 attribute, void *value, ...);
-    'GetChanAttributeU32': {
+    'GetChanAttributeUInt32': {
         'cname': 'DAQmxGetChanAttribute',
         'parameters': [
             {
@@ -524,7 +522,7 @@ functions = {
         ],
         'returns': 'int32'
     },
-    'SetChanAttributeU32': {
+    'SetChanAttributeUInt32': {
         'cname': 'DAQmxSetChanAttribute',
         'parameters': [
             {
@@ -554,7 +552,65 @@ functions = {
         ],
         'returns': 'int32'
     },
-    'GetChanAttributeF64': {
+    'GetChanAttributeInt32': {
+        'cname': 'DAQmxGetChanAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'channel',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'ChannelAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'int32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetChanAttributeInt32': {
+        'cname': 'DAQmxSetChanAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'channel',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'ChannelAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'int32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetChanAttributeDouble': {
         'cname': 'DAQmxGetChanAttribute',
         'parameters': [
             {
@@ -583,7 +639,7 @@ functions = {
         ],
         'returns': 'int32'
     },
-    'SetChanAttributeF64': {
+    'SetChanAttributeDouble': {
         'cname': 'DAQmxSetChanAttribute',
         'parameters': [
             {
@@ -612,7 +668,7 @@ functions = {
         ],
         'returns': 'int32'
     },
-    'GetChanAttributeStr': {
+    'GetChanAttributeString': {
         'cname': 'DAQmxGetChanAttribute',
         'parameters': [
             {
@@ -651,7 +707,7 @@ functions = {
         ],
         'returns': 'int32'
     },
-    'SetChanAttributeStr': {
+    'SetChanAttributeString': {
         'cname': 'DAQmxSetChanAttribute',
         'parameters': [
             {
@@ -671,6 +727,400 @@ functions = {
                 'name': 'attribute',
                 'type': 'int32',
                 'enum': 'ChannelAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetTimingAttributeUInt32': {
+        'cname': 'DAQmxGetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetTimingAttributeUInt32': {
+        'cname': 'DAQmxSetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetTimingAttributeInt32': {
+        'cname': 'DAQmxGetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'int32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetTimingAttributeInt32': {
+        'cname': 'DAQmxSetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'int32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetTimingAttributeDouble': {
+        'cname': 'DAQmxGetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'double',
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetTimingAttributeDouble': {
+        'cname': 'DAQmxSetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'double',
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetTimingAttributeString': {
+        'cname': 'DAQmxGetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'char[]',
+                'grpc_type': 'string',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'size'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'size',
+                'type': 'int32',
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetTimingAttributeString': {
+        'cname': 'DAQmxSetTimingAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'TimingAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'const char*',
+                'grpc_type': 'string'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetRealTimeAttributeUInt32': {
+        'cname': 'DAQmxGetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetRealTimeAttributeUInt32': {
+        'cname': 'DAQmxSetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'uInt32',
+                'grpc_type': 'uint32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetRealTimeAttributeInt32': {
+        'cname': 'DAQmxGetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'int32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetRealTimeAttributeInt32': {
+        'cname': 'DAQmxSetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'int32'
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetRealTimeAttributeDouble': {
+        'cname': 'DAQmxGetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'double',
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetRealTimeAttributeDouble': {
+        'cname': 'DAQmxSetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
+            },
+            {
+                'direction': 'in',
+                'name': 'value',
+                'type': 'double',
+            },
+        ],
+        'returns': 'int32'
+    },
+    'GetRealTimeAttributeString': {
+        'cname': 'DAQmxGetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
+            },
+            {
+                'direction': 'out',
+                'name': 'value',
+                'type': 'char[]',
+                'grpc_type': 'string',
+                'size': {
+                    'mechanism': 'passed-in',
+                    'value': 'size'
+                }
+            },
+            {
+                'direction': 'in',
+                'name': 'size',
+                'type': 'int32',
+            },
+        ],
+        'returns': 'int32'
+    },
+    'SetRealTimeAttributeString': {
+        'cname': 'DAQmxSetRealTimeAttribute',
+        'parameters': [
+            {
+                'direction': 'in',
+                'name': 'task',
+                'type': 'TaskHandle',
+                'grpc_type': 'nidevice_grpc.Session'
+            },
+            {
+                'direction': 'in',
+                'name': 'attribute',
+                'type': 'int32',
+                'enum': 'RealTimeAttributes'
             },
             {
                 'direction': 'in',

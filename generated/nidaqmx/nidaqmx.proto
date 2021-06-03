@@ -32,12 +32,30 @@ service NiDAQmx {
   rpc CreateAOVoltageChan(CreateAOVoltageChanRequest) returns (CreateAOVoltageChanResponse);
   rpc CreateDIChan(CreateDIChanRequest) returns (CreateDIChanResponse);
   rpc CreateDOChan(CreateDOChanRequest) returns (CreateDOChanResponse);
-  rpc GetChanAttributeU32(GetChanAttributeU32Request) returns (GetChanAttributeU32Response);
-  rpc SetChanAttributeU32(SetChanAttributeU32Request) returns (SetChanAttributeU32Response);
-  rpc GetChanAttributeF64(GetChanAttributeF64Request) returns (GetChanAttributeF64Response);
-  rpc SetChanAttributeF64(SetChanAttributeF64Request) returns (SetChanAttributeF64Response);
-  rpc GetChanAttributeStr(GetChanAttributeStrRequest) returns (GetChanAttributeStrResponse);
-  rpc SetChanAttributeStr(SetChanAttributeStrRequest) returns (SetChanAttributeStrResponse);
+  rpc GetChanAttributeUInt32(GetChanAttributeUInt32Request) returns (GetChanAttributeUInt32Response);
+  rpc SetChanAttributeUInt32(SetChanAttributeUInt32Request) returns (SetChanAttributeUInt32Response);
+  rpc GetChanAttributeInt32(GetChanAttributeInt32Request) returns (GetChanAttributeInt32Response);
+  rpc SetChanAttributeInt32(SetChanAttributeInt32Request) returns (SetChanAttributeInt32Response);
+  rpc GetChanAttributeDouble(GetChanAttributeDoubleRequest) returns (GetChanAttributeDoubleResponse);
+  rpc SetChanAttributeDouble(SetChanAttributeDoubleRequest) returns (SetChanAttributeDoubleResponse);
+  rpc GetChanAttributeString(GetChanAttributeStringRequest) returns (GetChanAttributeStringResponse);
+  rpc SetChanAttributeString(SetChanAttributeStringRequest) returns (SetChanAttributeStringResponse);
+  rpc GetTimingAttributeUInt32(GetTimingAttributeUInt32Request) returns (GetTimingAttributeUInt32Response);
+  rpc SetTimingAttributeUInt32(SetTimingAttributeUInt32Request) returns (SetTimingAttributeUInt32Response);
+  rpc GetTimingAttributeInt32(GetTimingAttributeInt32Request) returns (GetTimingAttributeInt32Response);
+  rpc SetTimingAttributeInt32(SetTimingAttributeInt32Request) returns (SetTimingAttributeInt32Response);
+  rpc GetTimingAttributeDouble(GetTimingAttributeDoubleRequest) returns (GetTimingAttributeDoubleResponse);
+  rpc SetTimingAttributeDouble(SetTimingAttributeDoubleRequest) returns (SetTimingAttributeDoubleResponse);
+  rpc GetTimingAttributeString(GetTimingAttributeStringRequest) returns (GetTimingAttributeStringResponse);
+  rpc SetTimingAttributeString(SetTimingAttributeStringRequest) returns (SetTimingAttributeStringResponse);
+  rpc GetRealTimeAttributeUInt32(GetRealTimeAttributeUInt32Request) returns (GetRealTimeAttributeUInt32Response);
+  rpc SetRealTimeAttributeUInt32(SetRealTimeAttributeUInt32Request) returns (SetRealTimeAttributeUInt32Response);
+  rpc GetRealTimeAttributeInt32(GetRealTimeAttributeInt32Request) returns (GetRealTimeAttributeInt32Response);
+  rpc SetRealTimeAttributeInt32(SetRealTimeAttributeInt32Request) returns (SetRealTimeAttributeInt32Response);
+  rpc GetRealTimeAttributeDouble(GetRealTimeAttributeDoubleRequest) returns (GetRealTimeAttributeDoubleResponse);
+  rpc SetRealTimeAttributeDouble(SetRealTimeAttributeDoubleRequest) returns (SetRealTimeAttributeDoubleResponse);
+  rpc GetRealTimeAttributeString(GetRealTimeAttributeStringRequest) returns (GetRealTimeAttributeStringResponse);
+  rpc SetRealTimeAttributeString(SetRealTimeAttributeStringRequest) returns (SetRealTimeAttributeStringResponse);
   rpc ReadDigitalU32(ReadDigitalU32Request) returns (ReadDigitalU32Response);
   rpc ReadDigitalU32Stream(ReadDigitalU32StreamRequest) returns (stream ReadDigitalU32StreamResponse);
   rpc WriteDigitalU32(WriteDigitalU32Request) returns (WriteDigitalU32Response);
@@ -618,6 +636,83 @@ enum ChannelAttributes {
   CHANNEL_ATTRIBUTES_Chan_SyncUnlockBehavior = 12604;
 }
 
+enum RealTimeAttributes {
+  REAL_TIME_ATTRIBUTES_UNSPECIFIED = 0;
+  REAL_TIME_ATTRIBUTES_RealTime_ConvLateErrorsToWarnings = 8942;
+  REAL_TIME_ATTRIBUTES_RealTime_NumOfWarmupIters = 8941;
+  REAL_TIME_ATTRIBUTES_RealTime_WaitForNextSampClkWaitMode = 8943;
+  REAL_TIME_ATTRIBUTES_RealTime_ReportMissedSamp = 8985;
+  REAL_TIME_ATTRIBUTES_RealTime_WriteRecoveryMode = 8986;
+}
+
+enum TimingAttributes {
+  TIMING_ATTRIBUTES_UNSPECIFIED = 0;
+  TIMING_ATTRIBUTES_SampQuant_SampMode = 4864;
+  TIMING_ATTRIBUTES_SampQuant_SampPerChan = 4880;
+  TIMING_ATTRIBUTES_SampTimingType = 4935;
+  TIMING_ATTRIBUTES_SampClk_Rate = 4932;
+  TIMING_ATTRIBUTES_SampClk_MaxRate = 8904;
+  TIMING_ATTRIBUTES_SampClk_Src = 6226;
+  TIMING_ATTRIBUTES_SampClk_ActiveEdge = 4865;
+  TIMING_ATTRIBUTES_SampClk_OverrunBehavior = 12028;
+  TIMING_ATTRIBUTES_SampClk_UnderflowBehavior = 10593;
+  TIMING_ATTRIBUTES_SampClk_TimebaseDiv = 6379;
+  TIMING_ATTRIBUTES_SampClk_Term = 12059;
+  TIMING_ATTRIBUTES_SampClk_Timebase_Rate = 4867;
+  TIMING_ATTRIBUTES_SampClk_Timebase_Src = 4872;
+  TIMING_ATTRIBUTES_SampClk_Timebase_ActiveEdge = 6380;
+  TIMING_ATTRIBUTES_SampClk_Timebase_MasterTimebaseDiv = 4869;
+  TIMING_ATTRIBUTES_SampClkTimebase_Term = 12060;
+  TIMING_ATTRIBUTES_SampClk_DigFltr_Enable = 8734;
+  TIMING_ATTRIBUTES_SampClk_DigFltr_MinPulseWidth = 8735;
+  TIMING_ATTRIBUTES_SampClk_DigFltr_TimebaseSrc = 8736;
+  TIMING_ATTRIBUTES_SampClk_DigFltr_TimebaseRate = 8737;
+  TIMING_ATTRIBUTES_SampClk_DigSync_Enable = 8738;
+  TIMING_ATTRIBUTES_SampClk_WriteWfm_UseInitialWfmDT = 12540;
+  TIMING_ATTRIBUTES_Hshk_DelayAfterXfer = 8898;
+  TIMING_ATTRIBUTES_Hshk_StartCond = 8899;
+  TIMING_ATTRIBUTES_Hshk_SampleInputDataWhen = 8900;
+  TIMING_ATTRIBUTES_ChangeDetect_DI_RisingEdgePhysicalChans = 8597;
+  TIMING_ATTRIBUTES_ChangeDetect_DI_FallingEdgePhysicalChans = 8598;
+  TIMING_ATTRIBUTES_ChangeDetect_DI_Tristate = 12026;
+  TIMING_ATTRIBUTES_OnDemand_SimultaneousAOEnable = 8608;
+  TIMING_ATTRIBUTES_Implicit_UnderflowBehavior = 12029;
+  TIMING_ATTRIBUTES_AIConv_Rate = 6216;
+  TIMING_ATTRIBUTES_AIConv_MaxRate = 8905;
+  TIMING_ATTRIBUTES_AIConv_Src = 5378;
+  TIMING_ATTRIBUTES_AIConv_ActiveEdge = 6227;
+  TIMING_ATTRIBUTES_AIConv_TimebaseDiv = 4917;
+  TIMING_ATTRIBUTES_AIConv_Timebase_Src = 4921;
+  TIMING_ATTRIBUTES_DelayFromSampClk_DelayUnits = 4868;
+  TIMING_ATTRIBUTES_DelayFromSampClk_Delay = 4887;
+  TIMING_ATTRIBUTES_AIConv_DigFltr_Enable = 11996;
+  TIMING_ATTRIBUTES_AIConv_DigFltr_MinPulseWidth = 11997;
+  TIMING_ATTRIBUTES_AIConv_DigFltr_TimebaseSrc = 11998;
+  TIMING_ATTRIBUTES_AIConv_DigFltr_TimebaseRate = 11999;
+  TIMING_ATTRIBUTES_AIConv_DigSync_Enable = 12000;
+  TIMING_ATTRIBUTES_MasterTimebase_Rate = 5269;
+  TIMING_ATTRIBUTES_MasterTimebase_Src = 4931;
+  TIMING_ATTRIBUTES_RefClk_Rate = 4885;
+  TIMING_ATTRIBUTES_RefClk_Src = 4886;
+  TIMING_ATTRIBUTES_SyncPulse_Type = 12598;
+  TIMING_ATTRIBUTES_SyncPulse_Src = 8765;
+  TIMING_ATTRIBUTES_SyncPulse_Time_When = 12599;
+  TIMING_ATTRIBUTES_SyncPulse_Time_Timescale = 12600;
+  TIMING_ATTRIBUTES_SyncPulse_SyncTime = 8766;
+  TIMING_ATTRIBUTES_SyncPulse_MinDelayToStart = 8767;
+  TIMING_ATTRIBUTES_SyncPulse_ResetTime = 12156;
+  TIMING_ATTRIBUTES_SyncPulse_ResetDelay = 12157;
+  TIMING_ATTRIBUTES_SyncPulse_Term = 12165;
+  TIMING_ATTRIBUTES_SyncClk_Interval = 12158;
+  TIMING_ATTRIBUTES_SampTimingEngine = 10790;
+  TIMING_ATTRIBUTES_FirstSampTimestamp_Enable = 12601;
+  TIMING_ATTRIBUTES_FirstSampTimestamp_Timescale = 12603;
+  TIMING_ATTRIBUTES_FirstSampTimestamp_Val = 12602;
+  TIMING_ATTRIBUTES_FirstSampClk_When = 12674;
+  TIMING_ATTRIBUTES_FirstSampClk_Timescale = 12675;
+  TIMING_ATTRIBUTES_FirstSampClk_Offset = 12714;
+}
+
 message CreateTaskRequest {
   string session_name = 1;
   string task_name = 2;
@@ -795,7 +890,7 @@ message CreateDOChanResponse {
   int32 status = 1;
 }
 
-message GetChanAttributeU32Request {
+message GetChanAttributeUInt32Request {
   nidevice_grpc.Session task = 1;
   string channel = 2;
   oneof attribute_enum {
@@ -804,12 +899,12 @@ message GetChanAttributeU32Request {
   }
 }
 
-message GetChanAttributeU32Response {
+message GetChanAttributeUInt32Response {
   int32 status = 1;
   uint32 value = 2;
 }
 
-message SetChanAttributeU32Request {
+message SetChanAttributeUInt32Request {
   nidevice_grpc.Session task = 1;
   string channel = 2;
   oneof attribute_enum {
@@ -819,11 +914,11 @@ message SetChanAttributeU32Request {
   uint32 value = 5;
 }
 
-message SetChanAttributeU32Response {
+message SetChanAttributeUInt32Response {
   int32 status = 1;
 }
 
-message GetChanAttributeF64Request {
+message GetChanAttributeInt32Request {
   nidevice_grpc.Session task = 1;
   string channel = 2;
   oneof attribute_enum {
@@ -832,12 +927,40 @@ message GetChanAttributeF64Request {
   }
 }
 
-message GetChanAttributeF64Response {
+message GetChanAttributeInt32Response {
+  int32 status = 1;
+  int32 value = 2;
+}
+
+message SetChanAttributeInt32Request {
+  nidevice_grpc.Session task = 1;
+  string channel = 2;
+  oneof attribute_enum {
+    ChannelAttributes attribute = 3;
+    int32 attribute_raw = 4;
+  }
+  int32 value = 5;
+}
+
+message SetChanAttributeInt32Response {
+  int32 status = 1;
+}
+
+message GetChanAttributeDoubleRequest {
+  nidevice_grpc.Session task = 1;
+  string channel = 2;
+  oneof attribute_enum {
+    ChannelAttributes attribute = 3;
+    int32 attribute_raw = 4;
+  }
+}
+
+message GetChanAttributeDoubleResponse {
   int32 status = 1;
   double value = 2;
 }
 
-message SetChanAttributeF64Request {
+message SetChanAttributeDoubleRequest {
   nidevice_grpc.Session task = 1;
   string channel = 2;
   oneof attribute_enum {
@@ -847,11 +970,11 @@ message SetChanAttributeF64Request {
   double value = 5;
 }
 
-message SetChanAttributeF64Response {
+message SetChanAttributeDoubleResponse {
   int32 status = 1;
 }
 
-message GetChanAttributeStrRequest {
+message GetChanAttributeStringRequest {
   nidevice_grpc.Session task = 1;
   string channel = 2;
   oneof attribute_enum {
@@ -861,12 +984,12 @@ message GetChanAttributeStrRequest {
   int32 size = 5;
 }
 
-message GetChanAttributeStrResponse {
+message GetChanAttributeStringResponse {
   int32 status = 1;
   string value = 2;
 }
 
-message SetChanAttributeStrRequest {
+message SetChanAttributeStringRequest {
   nidevice_grpc.Session task = 1;
   string channel = 2;
   oneof attribute_enum {
@@ -876,7 +999,217 @@ message SetChanAttributeStrRequest {
   string value = 5;
 }
 
-message SetChanAttributeStrResponse {
+message SetChanAttributeStringResponse {
+  int32 status = 1;
+}
+
+message GetTimingAttributeUInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+}
+
+message GetTimingAttributeUInt32Response {
+  int32 status = 1;
+  uint32 value = 2;
+}
+
+message SetTimingAttributeUInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  uint32 value = 4;
+}
+
+message SetTimingAttributeUInt32Response {
+  int32 status = 1;
+}
+
+message GetTimingAttributeInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+}
+
+message GetTimingAttributeInt32Response {
+  int32 status = 1;
+  int32 value = 2;
+}
+
+message SetTimingAttributeInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  int32 value = 4;
+}
+
+message SetTimingAttributeInt32Response {
+  int32 status = 1;
+}
+
+message GetTimingAttributeDoubleRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+}
+
+message GetTimingAttributeDoubleResponse {
+  int32 status = 1;
+  double value = 2;
+}
+
+message SetTimingAttributeDoubleRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  double value = 4;
+}
+
+message SetTimingAttributeDoubleResponse {
+  int32 status = 1;
+}
+
+message GetTimingAttributeStringRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  int32 size = 4;
+}
+
+message GetTimingAttributeStringResponse {
+  int32 status = 1;
+  string value = 2;
+}
+
+message SetTimingAttributeStringRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    TimingAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  string value = 4;
+}
+
+message SetTimingAttributeStringResponse {
+  int32 status = 1;
+}
+
+message GetRealTimeAttributeUInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+}
+
+message GetRealTimeAttributeUInt32Response {
+  int32 status = 1;
+  uint32 value = 2;
+}
+
+message SetRealTimeAttributeUInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  uint32 value = 4;
+}
+
+message SetRealTimeAttributeUInt32Response {
+  int32 status = 1;
+}
+
+message GetRealTimeAttributeInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+}
+
+message GetRealTimeAttributeInt32Response {
+  int32 status = 1;
+  int32 value = 2;
+}
+
+message SetRealTimeAttributeInt32Request {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  int32 value = 4;
+}
+
+message SetRealTimeAttributeInt32Response {
+  int32 status = 1;
+}
+
+message GetRealTimeAttributeDoubleRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+}
+
+message GetRealTimeAttributeDoubleResponse {
+  int32 status = 1;
+  double value = 2;
+}
+
+message SetRealTimeAttributeDoubleRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  double value = 4;
+}
+
+message SetRealTimeAttributeDoubleResponse {
+  int32 status = 1;
+}
+
+message GetRealTimeAttributeStringRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  int32 size = 4;
+}
+
+message GetRealTimeAttributeStringResponse {
+  int32 status = 1;
+  string value = 2;
+}
+
+message SetRealTimeAttributeStringRequest {
+  nidevice_grpc.Session task = 1;
+  oneof attribute_enum {
+    RealTimeAttributes attribute = 2;
+    int32 attribute_raw = 3;
+  }
+  string value = 4;
+}
+
+message SetRealTimeAttributeStringResponse {
   int32 status = 1;
 }
 
