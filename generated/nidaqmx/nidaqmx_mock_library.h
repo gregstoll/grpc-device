@@ -31,6 +31,8 @@ class NiDAQmxMockLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   MOCK_METHOD(int32, SetChanAttributeF64, (TaskHandle task, const char* channel, int32 attribute, double value), (override));
   MOCK_METHOD(int32, GetChanAttributeStr, (TaskHandle task, const char* channel, int32 attribute, char value[], int32 size), (override));
   MOCK_METHOD(int32, SetChanAttributeStr, (TaskHandle task, const char* channel, int32 attribute, const char* value), (override));
+  MOCK_METHOD(int32, ReadDigitalU32, (TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved), (override));
+  MOCK_METHOD(int32, ReadDigitalU32Stream, (TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved), (override));
   MOCK_METHOD(int32, ReadAnalogF64, (TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved), (override));
   MOCK_METHOD(int32, ReadAnalogF64StreamCodegen, (TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved), (override));
   MOCK_METHOD(int32, ReadAnalogF64StreamCustom, (TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved), (override));

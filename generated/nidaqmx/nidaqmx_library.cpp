@@ -35,6 +35,8 @@ NiDAQmxLibrary::NiDAQmxLibrary() : shared_library_(kLibraryName)
   function_pointers_.SetChanAttributeF64 = reinterpret_cast<SetChanAttributeF64Ptr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
   function_pointers_.GetChanAttributeStr = reinterpret_cast<GetChanAttributeStrPtr>(shared_library_.get_function_pointer("DAQmxGetChanAttribute"));
   function_pointers_.SetChanAttributeStr = reinterpret_cast<SetChanAttributeStrPtr>(shared_library_.get_function_pointer("DAQmxSetChanAttribute"));
+  function_pointers_.ReadDigitalU32 = reinterpret_cast<ReadDigitalU32Ptr>(shared_library_.get_function_pointer("DAQmxReadDigitalU32"));
+  function_pointers_.ReadDigitalU32Stream = reinterpret_cast<ReadDigitalU32StreamPtr>(shared_library_.get_function_pointer("DAQmxReadDigitalU32"));
   function_pointers_.ReadAnalogF64 = reinterpret_cast<ReadAnalogF64Ptr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.ReadAnalogF64StreamCodegen = reinterpret_cast<ReadAnalogF64StreamCodegenPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
   function_pointers_.ReadAnalogF64StreamCustom = reinterpret_cast<ReadAnalogF64StreamCustomPtr>(shared_library_.get_function_pointer("DAQmxReadAnalogF64"));
@@ -173,6 +175,22 @@ int32 NiDAQmxLibrary::SetChanAttributeStr(TaskHandle task, const char* channel, 
     throw nidevice_grpc::LibraryLoadException("Could not find DAQmxSetChanAttribute.");
   }
   return function_pointers_.SetChanAttributeStr(task, channel, attribute, value);
+}
+
+int32 NiDAQmxLibrary::ReadDigitalU32(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved)
+{
+  if (!function_pointers_.ReadDigitalU32) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadDigitalU32.");
+  }
+  return function_pointers_.ReadDigitalU32(task, numSampsPerChan, timeout, fillMode, readArray, arraySizeInSamps, sampsPerChan, reserved);
+}
+
+int32 NiDAQmxLibrary::ReadDigitalU32Stream(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved)
+{
+  if (!function_pointers_.ReadDigitalU32Stream) {
+    throw nidevice_grpc::LibraryLoadException("Could not find DAQmxReadDigitalU32.");
+  }
+  return function_pointers_.ReadDigitalU32Stream(task, numSampsPerChan, timeout, fillMode, readArray, arraySizeInSamps, sampsPerChan, reserved);
 }
 
 int32 NiDAQmxLibrary::ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved)

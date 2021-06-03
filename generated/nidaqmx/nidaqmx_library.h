@@ -32,6 +32,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   int32 SetChanAttributeF64(TaskHandle task, const char* channel, int32 attribute, double value);
   int32 GetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
   int32 SetChanAttributeStr(TaskHandle task, const char* channel, int32 attribute, const char* value);
+  int32 ReadDigitalU32(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  int32 ReadDigitalU32Stream(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   int32 ReadAnalogF64(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   int32 ReadAnalogF64StreamCodegen(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   int32 ReadAnalogF64StreamCustom(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
@@ -54,6 +56,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
   using SetChanAttributeF64Ptr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, double value);
   using GetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, char value[], int32 size);
   using SetChanAttributeStrPtr = int32 (*)(TaskHandle task, const char* channel, int32 attribute, const char* value);
+  using ReadDigitalU32Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
+  using ReadDigitalU32StreamPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, uInt32 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   using ReadAnalogF64Ptr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   using ReadAnalogF64StreamCodegenPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
   using ReadAnalogF64StreamCustomPtr = int32 (*)(TaskHandle task, int32 numSampsPerChan, double timeout, int32 fillMode, float64 readArray[], uInt32 arraySizeInSamps, int32* sampsPerChan, uInt64 reserved);
@@ -76,6 +80,8 @@ class NiDAQmxLibrary : public nidaqmx_grpc::NiDAQmxLibraryInterface {
     SetChanAttributeF64Ptr SetChanAttributeF64;
     GetChanAttributeStrPtr GetChanAttributeStr;
     SetChanAttributeStrPtr SetChanAttributeStr;
+    ReadDigitalU32Ptr ReadDigitalU32;
+    ReadDigitalU32StreamPtr ReadDigitalU32Stream;
     ReadAnalogF64Ptr ReadAnalogF64;
     ReadAnalogF64StreamCodegenPtr ReadAnalogF64StreamCodegen;
     ReadAnalogF64StreamCustomPtr ReadAnalogF64StreamCustom;
