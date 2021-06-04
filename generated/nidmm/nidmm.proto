@@ -67,7 +67,6 @@ service NiDmm {
   rpc Fetch(FetchRequest) returns (FetchResponse);
   rpc FetchMultiPoint(FetchMultiPointRequest) returns (FetchMultiPointResponse);
   rpc FetchWaveform(FetchWaveformRequest) returns (FetchWaveformResponse);
-  rpc GetApertureTimeInfo(GetApertureTimeInfoRequest) returns (GetApertureTimeInfoResponse);
   rpc GetAttributeViBoolean(GetAttributeViBooleanRequest) returns (GetAttributeViBooleanResponse);
   rpc GetAttributeViInt32(GetAttributeViInt32Request) returns (GetAttributeViInt32Response);
   rpc GetAttributeViReal64(GetAttributeViReal64Request) returns (GetAttributeViReal64Response);
@@ -1146,18 +1145,6 @@ message FetchWaveformResponse {
   int32 status = 1;
   repeated double waveform_array = 2;
   sint32 actual_number_of_points = 3;
-}
-
-message GetApertureTimeInfoRequest {
-  nidevice_grpc.Session vi = 1;
-}
-
-message GetApertureTimeInfoResponse {
-  int32 status = 1;
-  ApertureTime aperture_time = 2;
-  double aperture_time_raw = 3;
-  ApertureTimeUnits aperture_time_units = 4;
-  sint32 aperture_time_units_raw = 5;
 }
 
 message GetAttributeViBooleanRequest {

@@ -68,7 +68,6 @@ class NiDmmMockLibrary : public nidmm_grpc::NiDmmLibraryInterface {
   MOCK_METHOD(ViStatus, Fetch, (ViSession vi, ViInt32 maximumTime, ViReal64* reading), (override));
   MOCK_METHOD(ViStatus, FetchMultiPoint, (ViSession vi, ViInt32 maximumTime, ViInt32 arraySize, ViReal64 readingArray[], ViInt32* actualNumberOfPoints), (override));
   MOCK_METHOD(ViStatus, FetchWaveform, (ViSession vi, ViInt32 maximumTime, ViInt32 arraySize, ViReal64 waveformArray[], ViInt32* actualNumberOfPoints), (override));
-  MOCK_METHOD(ViStatus, GetApertureTimeInfo, (ViSession vi, ViReal64* apertureTime, ViInt32* apertureTimeUnits), (override));
   MOCK_METHOD(ViStatus, GetAttributeViBoolean, (ViSession vi, ViConstString channelName, ViAttr attributeId, ViBoolean* attributeValue), (override));
   MOCK_METHOD(ViStatus, GetAttributeViInt32, (ViSession vi, ViConstString channelName, ViAttr attributeId, ViInt32* attributeValue), (override));
   MOCK_METHOD(ViStatus, GetAttributeViReal64, (ViSession vi, ViConstString channelName, ViAttr attributeId, ViReal64* attributeValue), (override));

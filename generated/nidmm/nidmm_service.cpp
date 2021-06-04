@@ -1412,33 +1412,6 @@ namespace nidmm_grpc {
 
   //---------------------------------------------------------------------
   //---------------------------------------------------------------------
-  ::grpc::Status NiDmmService::GetApertureTimeInfo(::grpc::ServerContext* context, const GetApertureTimeInfoRequest* request, GetApertureTimeInfoResponse* response)
-  {
-    if (context->IsCancelled()) {
-      return ::grpc::Status::CANCELLED;
-    }
-    try {
-      auto vi_grpc_session = request->vi();
-      auto vi = session_repository_.access_session(vi_grpc_session.id(), vi_grpc_session.name());
-      ViReal64 aperture_time {};
-      ViInt32 aperture_time_units {};
-      auto status = library_->GetApertureTimeInfo(vi, &aperture_time, &aperture_time_units);
-      response->set_status(status);
-      if (status == 0) {
-        response->set_aperture_time(static_cast<nidmm_grpc::ApertureTime>(aperture_time));
-        response->set_aperture_time_raw(aperture_time);
-        response->set_aperture_time_units(static_cast<nidmm_grpc::ApertureTimeUnits>(aperture_time_units));
-        response->set_aperture_time_units_raw(aperture_time_units);
-      }
-      return ::grpc::Status::OK;
-    }
-    catch (nidevice_grpc::LibraryLoadException& ex) {
-      return ::grpc::Status(::grpc::NOT_FOUND, ex.what());
-    }
-  }
-
-  //---------------------------------------------------------------------
-  //---------------------------------------------------------------------
   ::grpc::Status NiDmmService::GetAttributeViBoolean(::grpc::ServerContext* context, const GetAttributeViBooleanRequest* request, GetAttributeViBooleanResponse* response)
   {
     if (context->IsCancelled()) {

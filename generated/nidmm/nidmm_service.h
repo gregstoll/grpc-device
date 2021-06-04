@@ -75,7 +75,6 @@ public:
   ::grpc::Status Fetch(::grpc::ServerContext* context, const FetchRequest* request, FetchResponse* response) override;
   ::grpc::Status FetchMultiPoint(::grpc::ServerContext* context, const FetchMultiPointRequest* request, FetchMultiPointResponse* response) override;
   ::grpc::Status FetchWaveform(::grpc::ServerContext* context, const FetchWaveformRequest* request, FetchWaveformResponse* response) override;
-  ::grpc::Status GetApertureTimeInfo(::grpc::ServerContext* context, const GetApertureTimeInfoRequest* request, GetApertureTimeInfoResponse* response) override;
   ::grpc::Status GetAttributeViBoolean(::grpc::ServerContext* context, const GetAttributeViBooleanRequest* request, GetAttributeViBooleanResponse* response) override;
   ::grpc::Status GetAttributeViInt32(::grpc::ServerContext* context, const GetAttributeViInt32Request* request, GetAttributeViInt32Response* response) override;
   ::grpc::Status GetAttributeViReal64(::grpc::ServerContext* context, const GetAttributeViReal64Request* request, GetAttributeViReal64Response* response) override;

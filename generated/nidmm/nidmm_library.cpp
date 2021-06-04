@@ -72,7 +72,6 @@ NiDmmLibrary::NiDmmLibrary() : shared_library_(kLibraryName)
   function_pointers_.Fetch = reinterpret_cast<FetchPtr>(shared_library_.get_function_pointer("niDMM_Fetch"));
   function_pointers_.FetchMultiPoint = reinterpret_cast<FetchMultiPointPtr>(shared_library_.get_function_pointer("niDMM_FetchMultiPoint"));
   function_pointers_.FetchWaveform = reinterpret_cast<FetchWaveformPtr>(shared_library_.get_function_pointer("niDMM_FetchWaveform"));
-  function_pointers_.GetApertureTimeInfo = reinterpret_cast<GetApertureTimeInfoPtr>(shared_library_.get_function_pointer("niDMM_GetApertureTimeInfo"));
   function_pointers_.GetAttributeViBoolean = reinterpret_cast<GetAttributeViBooleanPtr>(shared_library_.get_function_pointer("niDMM_GetAttributeViBoolean"));
   function_pointers_.GetAttributeViInt32 = reinterpret_cast<GetAttributeViInt32Ptr>(shared_library_.get_function_pointer("niDMM_GetAttributeViInt32"));
   function_pointers_.GetAttributeViReal64 = reinterpret_cast<GetAttributeViReal64Ptr>(shared_library_.get_function_pointer("niDMM_GetAttributeViReal64"));
@@ -747,18 +746,6 @@ ViStatus NiDmmLibrary::FetchWaveform(ViSession vi, ViInt32 maximumTime, ViInt32 
   return niDMM_FetchWaveform(vi, maximumTime, arraySize, waveformArray, actualNumberOfPoints);
 #else
   return function_pointers_.FetchWaveform(vi, maximumTime, arraySize, waveformArray, actualNumberOfPoints);
-#endif
-}
-
-ViStatus NiDmmLibrary::GetApertureTimeInfo(ViSession vi, ViReal64* apertureTime, ViInt32* apertureTimeUnits)
-{
-  if (!function_pointers_.GetApertureTimeInfo) {
-    throw nidevice_grpc::LibraryLoadException("Could not find niDMM_GetApertureTimeInfo.");
-  }
-#if defined(_MSC_VER)
-  return niDMM_GetApertureTimeInfo(vi, apertureTime, apertureTimeUnits);
-#else
-  return function_pointers_.GetApertureTimeInfo(vi, apertureTime, apertureTimeUnits);
 #endif
 }
 
