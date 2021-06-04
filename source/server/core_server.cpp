@@ -20,8 +20,10 @@
   #include "linux/daemonize.h"
   #include "linux/syslog_logging.h"
 #endif
-#include <nidaqmx/nidaqmx_service.h>
 #include <nidaqmx/nidaqmx_library.h>
+#include <nidaqmx/nidaqmx_service.h>
+#include <nixnet/nixnet_library.h>
+#include <nixnet/nixnet_service.h>
 
 struct ServerConfiguration
 {
@@ -104,6 +106,10 @@ static void RunServer(const ServerConfiguration& config)
   nidaqmx_grpc::NiDAQmxLibrary nidaqmx_library;
   nidaqmx_grpc::NiDAQmxService nidaqmx_service(&nidaqmx_library, &session_repository);
   builder.RegisterService(&nidaqmx_service);
+
+  nixnet_grpc::NiXnetLibrary nixnet_library;
+  nixnet_grpc::NiXnetService nixnet_service(&nixnet_library, &session_repository);
+  builder.RegisterService(&nixnet_service);
 
   // Assemble the server.
   {
@@ -193,7 +199,7 @@ Options parse_options(int argc, char** argv)
     }
     else
 #endif
-    if (strcmp("--help", argv[i]) == 0 || strcmp("-h", argv[i]) == 0) {
+        if (strcmp("--help", argv[i]) == 0 || strcmp("-h", argv[i]) == 0) {
       nidevice_grpc::logging::log(nidevice_grpc::logging::Level_Info, usage);
       exit(EXIT_SUCCESS);
     }

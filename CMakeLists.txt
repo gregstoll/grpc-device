@@ -67,7 +67,7 @@ set(metadata_dir ${CMAKE_SOURCE_DIR}/source/codegen/metadata)
 set(service_output_dir ${CMAKE_SOURCE_DIR}/generated)
 set(codegen_dir ${CMAKE_SOURCE_DIR}/source/codegen)
 set(custom_dir ${CMAKE_SOURCE_DIR}/source/custom)
-set(nidrivers "nidcpower" "nidmm" "nifake" "niscope" "niswitch" "nisync" "nidaqmx")
+set(nidrivers "nidcpower" "nidmm" "nifake" "niscope" "niswitch" "nisync" "nidaqmx" "nixnet")
 
 #----------------------------------------------------------------------
 # Create NI Driver APIs proto and server files
