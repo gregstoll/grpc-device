@@ -7,32 +7,30 @@
 #ifndef NIXNET_GRPC_SERVICE_H
 #define NIXNET_GRPC_SERVICE_H
 
-#include <grpcpp/ext/proto_server_reflection_plugin.h>
+#include <nixnet.grpc.pb.h>
+#include <condition_variable>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
-#include <nixnet.grpc.pb.h>
+#include <grpcpp/ext/proto_server_reflection_plugin.h>
+#include <map>
 #include <server/session_repository.h>
 #include <server/shared_library.h>
-
-#include <condition_variable>
-#include <map>
 
 #include "nixnet_library_interface.h"
 
 namespace nixnet_grpc {
 
 class NiXnetService final : public NiXnet::Service {
- public:
+public:
   NiXnetService(NiXnetLibraryInterface* library, nidevice_grpc::SessionRepository* session_repository);
   virtual ~NiXnetService();
   ::grpc::Status CreateSession(::grpc::ServerContext* context, const CreateSessionRequest* request, CreateSessionResponse* response) override;
   ::grpc::Status Clear(::grpc::ServerContext* context, const ClearRequest* request, ClearResponse* response) override;
-
- private:
+private:
   NiXnetLibraryInterface* library_;
   nidevice_grpc::ResourceRepository<nxSessionRef_t> session_repository_;
 };
 
-}  // namespace nixnet_grpc
+} // namespace nixnet_grpc
 
 #endif  // NIXNET_GRPC_SERVICE_H

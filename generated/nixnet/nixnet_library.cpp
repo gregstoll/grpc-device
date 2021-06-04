@@ -41,7 +41,11 @@ nxSessionRef_t NiXnetLibrary::CreateSession(const char* databaseName, const char
   if (!function_pointers_.CreateSession) {
     throw nidevice_grpc::LibraryLoadException("Could not find nxCreateSession.");
   }
+#if defined(_MSC_VER)
+  return nxCreateSession(databaseName, clusterName, list, interfaceParameter, mode, session);
+#else
   return function_pointers_.CreateSession(databaseName, clusterName, list, interfaceParameter, mode, session);
+#endif
 }
 
 nxSessionRef_t NiXnetLibrary::Clear(nxSessionRef_t session)
@@ -49,7 +53,11 @@ nxSessionRef_t NiXnetLibrary::Clear(nxSessionRef_t session)
   if (!function_pointers_.Clear) {
     throw nidevice_grpc::LibraryLoadException("Could not find nxClear.");
   }
+#if defined(_MSC_VER)
+  return nxClear(session);
+#else
   return function_pointers_.Clear(session);
+#endif
 }
 
 }  // namespace nixnet_grpc
