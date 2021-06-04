@@ -773,6 +773,7 @@ message GetExtendedErrorInfoResponse {
 message ConnectTermsRequest {
   string source_terminal = 1;
   string destination_terminal = 2;
+  int32 signal_modifiers = 3;
 }
 
 message ConnectTermsResponse {

@@ -166,7 +166,8 @@ namespace nidaqmx_grpc {
     try {
       const char* source_terminal = request->source_terminal().c_str();
       const char* destination_terminal = request->destination_terminal().c_str();
-      auto status = library_->ConnectTerms(source_terminal, destination_terminal);
+      int32 signal_modifiers = request->signal_modifiers();
+      auto status = library_->ConnectTerms(source_terminal, destination_terminal, signal_modifiers);
       response->set_status(status);
       return ::grpc::Status::OK;
     }
@@ -253,7 +254,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 interleaved = request->interleaved();
       uInt32 array_size_in_samps = request->array_size_in_samps();
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       response->mutable_read_array_frequency()->Resize(array_size_in_samps, 0);
       float64* read_array_frequency = response->mutable_read_array_frequency()->mutable_data();
       response->mutable_read_array_duty_cycle()->Resize(array_size_in_samps, 0);
@@ -287,7 +289,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 interleaved = request->interleaved();
       uInt32 array_size_in_samps = request->array_size_in_samps();
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       response->mutable_read_array_frequency()->Resize(array_size_in_samps, 0);
       float64* read_array_frequency = response->mutable_read_array_frequency()->mutable_data();
       response->mutable_read_array_duty_cycle()->Resize(array_size_in_samps, 0);
@@ -1264,7 +1267,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
       uInt32 array_size_in_samps = request->array_size_in_samps();
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       response->mutable_read_array()->Resize(array_size_in_samps, 0);
       uInt32* read_array = reinterpret_cast<uInt32*>(response->mutable_read_array()->mutable_data());
       int32 samps_per_chan {};
@@ -1296,7 +1300,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
       uInt32 array_size_in_samps = request->array_size_in_samps();
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       response->mutable_read_array()->Resize(array_size_in_samps, 0);
       uInt32* read_array = reinterpret_cast<uInt32*>(response->mutable_read_array()->mutable_data());
       int32 samps_per_chan {};
@@ -1329,7 +1334,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 data_layout = request->data_layout();
       auto write_array = reinterpret_cast<const uInt32*>(request->write_array().data());
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       int32 samps_per_chan_written {};
       auto status = library_->WriteDigitalU32(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, reserved);
       response->set_status(status);
@@ -1357,7 +1363,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
       uInt32 array_size_in_samps = request->array_size_in_samps();
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       response->mutable_read_array()->Resize(array_size_in_samps, 0);
       float64* read_array = response->mutable_read_array()->mutable_data();
       int32 samps_per_chan {};
@@ -1389,7 +1396,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
       uInt32 array_size_in_samps = request->array_size_in_samps();
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       response->mutable_read_array()->Resize(array_size_in_samps, 0);
       float64* read_array = response->mutable_read_array()->mutable_data();
       int32 samps_per_chan {};
@@ -1422,7 +1430,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 data_layout = request->data_layout();
       auto write_array = request->write_array().data();
-      uInt64 reserved = request->reserved();
+      bool32* reserved = nullptr;
+
       int32 samps_per_chan_written {};
       auto status = library_->WriteAnalogF64(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, reserved);
       response->set_status(status);

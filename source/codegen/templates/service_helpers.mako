@@ -223,6 +223,8 @@ one_of_case_prefix = f'{namespace_prefix}{function_name}Request::{PascalFieldNam
       auto ${parameter_name} = ${request_snippet}.data();\
 % elif common_helpers.is_array(c_type):
       auto ${parameter_name} = const_cast<${c_type_pointer}>(${request_snippet}.data());\
+%elif parameter_name == 'reserved' and c_type == 'bool32*':
+      ${c_type} ${parameter_name} = nullptr;
 % else:
       ${c_type} ${parameter_name} = ${request_snippet};\
 % endif

@@ -16,14 +16,13 @@ namespace nidaqmx_grpc {
     double timeout = request->timeout();
     int32 fill_mode = request->fill_mode();
     uInt32 array_size_in_samps = request->array_size_in_samps();
-    uInt64 reserved = request->reserved();
     response->mutable_read_array()->Resize(array_size_in_samps, 0);
     float64* read_array = response->mutable_read_array()->mutable_data();
     int32 samps_per_chan{};
     int32 status = 0;
     do {
       // Note: calls the callback from vanilla read: important that that exists!
-      status = library_->ReadAnalogF64(task, num_samps_per_chan, timeout, fill_mode, read_array, array_size_in_samps, &samps_per_chan, reserved);
+      status = library_->ReadAnalogF64(task, num_samps_per_chan, timeout, fill_mode, read_array, array_size_in_samps, &samps_per_chan, nullptr);
       response->set_status(status);
       if (status == 0) {
         response->set_samps_per_chan(samps_per_chan);
@@ -54,9 +53,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 data_layout = request->data_layout();
       auto write_array = request->write_array().data();
-      uInt64 reserved = request->reserved();
       int32 samps_per_chan_written{};
-      auto status = library_->WriteAnalogF64(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, reserved);
+      auto status = library_->WriteAnalogF64(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, nullptr);
       response->set_status(status);
       if (status == 0) {
         response->set_samps_per_chan_written(samps_per_chan_written);
@@ -72,7 +70,7 @@ namespace nidaqmx_grpc {
   }
 }
 
-  //---------------------------------------------------------------------
+//---------------------------------------------------------------------
 //---------------------------------------------------------------------
 ::grpc::Status NiDAQmxService::WriteDigitalU32Stream(::grpc::ServerContext* context, ::grpc::ServerReader<WriteDigitalU32StreamRequest>* reader, WriteDigitalU32StreamResponse* response)
 {
@@ -90,9 +88,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 data_layout = request->data_layout();
       auto write_array = reinterpret_cast<const uInt32*>(request->write_array().data());
-      uInt64 reserved = request->reserved();
       int32 samps_per_chan_written{};
-      auto status = library_->WriteDigitalU32Stream(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, reserved);
+      auto status = library_->WriteDigitalU32Stream(task, num_samps_per_chan, auto_start, timeout, data_layout, write_array, &samps_per_chan_written, nullptr);
       response->set_status(status);
       if (status == 0) {
         response->set_samps_per_chan_written(samps_per_chan_written);
@@ -119,11 +116,10 @@ namespace nidaqmx_grpc {
     double timeout = request->timeout();
     int32 fill_mode = request->fill_mode();
     uInt32 array_size_in_samps = request->array_size_in_samps();
-    uInt64 reserved = request->reserved();
     response->mutable_read_array()->resize(array_size_in_samps * 2);
     uInt16* read_array = reinterpret_cast<uInt16*>(response->mutable_read_array()->data());
     int32 samps_per_chan{};
-    auto status = library_->ReadDigitalU16(task, num_samps_per_chan, timeout, fill_mode, read_array, array_size_in_samps, &samps_per_chan, reserved);
+    auto status = library_->ReadDigitalU16(task, num_samps_per_chan, timeout, fill_mode, read_array, array_size_in_samps, &samps_per_chan, nullptr);
     response->set_status(status);
     if (status == 0) {
       response->set_samps_per_chan(samps_per_chan);
@@ -151,12 +147,11 @@ namespace nidaqmx_grpc {
     double timeout = request->timeout();
     int32 fill_mode = request->fill_mode();
     uInt32 array_size_in_samps = request->array_size_in_samps();
-    uInt64 reserved = request->reserved();
     response->mutable_read_array()->resize(array_size_in_samps * 2);
     uInt16* read_array = reinterpret_cast<uInt16*>(response->mutable_read_array()->data());
     int32 samps_per_chan{};
     do {
-      auto status = library_->ReadDigitalU16Stream(task, num_samps_per_chan, timeout, fill_mode, read_array, array_size_in_samps, &samps_per_chan, reserved);
+      auto status = library_->ReadDigitalU16Stream(task, num_samps_per_chan, timeout, fill_mode, read_array, array_size_in_samps, &samps_per_chan, nullptr);
       response->set_status(status);
       if (status == 0) {
         response->set_samps_per_chan(samps_per_chan);
@@ -169,7 +164,7 @@ namespace nidaqmx_grpc {
   }
 }
 
-  //---------------------------------------------------------------------
+//---------------------------------------------------------------------
 //---------------------------------------------------------------------
 ::grpc::Status NiDAQmxService::WriteDigitalU16(::grpc::ServerContext* context, const WriteDigitalU16Request* request, WriteDigitalU16Response* response)
 {
@@ -184,9 +179,8 @@ namespace nidaqmx_grpc {
     double timeout = request->timeout();
     int32 data_layout = request->data_layout();
     auto write_array = request->write_array().data();
-    uInt64 reserved = request->reserved();
     int32 samps_per_chan_written{};
-    auto status = library_->WriteDigitalU16(task, num_samps_per_chan, auto_start, timeout, data_layout, reinterpret_cast<const uInt16*>(write_array), &samps_per_chan_written, reserved);
+    auto status = library_->WriteDigitalU16(task, num_samps_per_chan, auto_start, timeout, data_layout, reinterpret_cast<const uInt16*>(write_array), &samps_per_chan_written, nullptr);
     response->set_status(status);
     if (status == 0) {
       response->set_samps_per_chan_written(samps_per_chan_written);
@@ -198,7 +192,7 @@ namespace nidaqmx_grpc {
   }
 }
 
-  //---------------------------------------------------------------------
+//---------------------------------------------------------------------
 //---------------------------------------------------------------------
 ::grpc::Status NiDAQmxService::WriteDigitalU16Stream(::grpc::ServerContext* context, ::grpc::ServerReader<WriteDigitalU16StreamRequest>* reader, WriteDigitalU16StreamResponse* response)
 {
@@ -216,9 +210,8 @@ namespace nidaqmx_grpc {
       double timeout = request->timeout();
       int32 data_layout = request->data_layout();
       auto write_array = request->write_array().data();
-      uInt64 reserved = request->reserved();
       int32 samps_per_chan_written{};
-      auto status = library_->WriteDigitalU16Stream(task, num_samps_per_chan, auto_start, timeout, data_layout, reinterpret_cast<const uInt16*>(write_array), &samps_per_chan_written, reserved);
+      auto status = library_->WriteDigitalU16Stream(task, num_samps_per_chan, auto_start, timeout, data_layout, reinterpret_cast<const uInt16*>(write_array), &samps_per_chan_written, nullptr);
       response->set_status(status);
       if (status == 0) {
         response->set_samps_per_chan_written(samps_per_chan_written);

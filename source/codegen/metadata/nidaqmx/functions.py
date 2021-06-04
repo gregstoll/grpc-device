@@ -114,6 +114,11 @@ functions = {
                 'type': 'const char*',
                 'grpc_type': 'string',
             },
+            {
+                'direction': 'in',
+                'name': 'signal_modifiers',
+                'type': 'int32'
+            }
         ],
         'returns': 'int32'
     },
@@ -262,7 +267,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
             }
         ],
@@ -327,7 +332,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
             }
         ],
@@ -1181,7 +1186,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
             }
         ],
@@ -1236,7 +1241,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
             }
         ],
@@ -1290,7 +1295,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
             }
         ],
@@ -1346,7 +1351,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
             }
         ],
@@ -1397,7 +1402,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
@@ -1449,7 +1454,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
@@ -1499,7 +1504,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
@@ -1551,7 +1556,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
@@ -1608,7 +1613,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
             }
         ],
@@ -1663,7 +1668,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
@@ -1720,7 +1725,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
@@ -1772,7 +1777,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
@@ -1780,7 +1785,7 @@ functions = {
         'returns': 'int32',
     },
     'WriteAnalogF64StreamCustom': {
-        'cname': 'DAQmxWriteAnalogF64Stream',
+        'cname': 'DAQmxWriteAnalogF64',
         'codegen_method': 'CustomCode',
         'stream_in': True,
         'parameters': [
@@ -1824,7 +1829,7 @@ functions = {
             {
                 'direction': 'in',
                 'name': 'reserved',
-                'type': 'uInt64',
+                'type': 'bool32*',
                 'grpc_type': 'uint64',
 
             }
