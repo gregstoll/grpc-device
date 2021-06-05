@@ -40,7 +40,7 @@ functions = {
                 'grpc_type': 'nidevice_grpc.Session'
             }
         ],
-        'returns': 'nxSessionRef_t',
+        'returns': 'nxStatus_t',
     },
     'Clear': {
         'parameters': [
@@ -51,6 +51,6 @@ functions = {
                 'grpc_type': 'nidevice_grpc.Session'
             }
         ],
-        'returns': 'nxSessionRef_t',
+        'returns': 'nxStatus_t',
     }
 }
