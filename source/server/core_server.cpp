@@ -1,4 +1,3 @@
-#include <mutex>
 #include <nidcpower/nidcpower_library.h>
 #include <nidcpower/nidcpower_service.h>
 #include <nidmm/nidmm_library.h>
@@ -9,6 +8,8 @@
 #include <niswitch/niswitch_service.h>
 #include <nisync/nisync_library.h>
 #include <nisync/nisync_service.h>
+
+#include <mutex>
 
 #include "logging.h"
 #include "server_configuration_parser.h"
@@ -22,11 +23,12 @@
 #endif
 #include <nidaqmx/nidaqmx_library.h>
 #include <nidaqmx/nidaqmx_service.h>
+#include <nifpga/nifpga_library.h>
+#include <nifpga/nifpga_service.h>
 #include <nixnet/nixnet_library.h>
 #include <nixnet/nixnet_service.h>
 
-struct ServerConfiguration
-{
+struct ServerConfiguration {
   std::string server_address;
   std::string server_cert;
   std::string server_key;
@@ -58,7 +60,7 @@ static std::mutex server_mutex;
 static std::unique_ptr<grpc::Server> server;
 static bool shutdown = false;
 
-static void StopServer() 
+static void StopServer()
 {
   std::lock_guard<std::mutex> guard(server_mutex);
   shutdown = true;
@@ -110,6 +112,10 @@ static void RunServer(const ServerConfiguration& config)
   nixnet_grpc::NiXnetLibrary nixnet_library;
   nixnet_grpc::NiXnetService nixnet_service(&nixnet_library, &session_repository);
   builder.RegisterService(&nixnet_service);
+
+  nifpga_grpc::NiFpgaLibrary nifpga_library;
+  nifpga_grpc::NiFpgaService nifpga_service(&nifpga_library, &session_repository);
+  builder.RegisterService(&nifpga_service);
 
   // Assemble the server.
   {
@@ -235,7 +241,7 @@ int main(int argc, char** argv)
     nidevice_grpc::logging::setup_syslog(options.daemonize, options.identity);
     nidevice_grpc::logging::set_logger(&nidevice_grpc::logging::log_syslog);
   }
-  
+
   if (options.daemonize) {
     nidevice_grpc::daemonize(&StopServer, options.identity);
   }
