@@ -15,8 +15,8 @@ class NiXnetLibraryInterface {
  public:
   virtual ~NiXnetLibraryInterface() {}
 
-  virtual nxSessionRef_t CreateSession(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session) = 0;
-  virtual nxSessionRef_t Clear(nxSessionRef_t session) = 0;
+  virtual nxStatus_t CreateSession(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session) = 0;
+  virtual nxStatus_t Clear(nxSessionRef_t session) = 0;
 };
 
 }  // namespace nixnet_grpc

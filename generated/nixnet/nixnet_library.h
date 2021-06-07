@@ -18,12 +18,12 @@ class NiXnetLibrary : public nixnet_grpc::NiXnetLibraryInterface {
   virtual ~NiXnetLibrary();
 
   ::grpc::Status check_function_exists(std::string functionName);
-  nxSessionRef_t CreateSession(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session);
-  nxSessionRef_t Clear(nxSessionRef_t session);
+  nxStatus_t CreateSession(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session);
+  nxStatus_t Clear(nxSessionRef_t session);
 
  private:
-  using CreateSessionPtr = nxSessionRef_t (*)(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session);
-  using ClearPtr = nxSessionRef_t (*)(nxSessionRef_t session);
+  using CreateSessionPtr = nxStatus_t (*)(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session);
+  using ClearPtr = nxStatus_t (*)(nxSessionRef_t session);
 
   typedef struct FunctionPointers {
     CreateSessionPtr CreateSession;

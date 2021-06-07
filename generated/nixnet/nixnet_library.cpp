@@ -36,7 +36,7 @@ NiXnetLibrary::~NiXnetLibrary()
     : ::grpc::Status(::grpc::NOT_FOUND, "Could not find the function " + functionName);
 }
 
-nxSessionRef_t NiXnetLibrary::CreateSession(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session)
+nxStatus_t NiXnetLibrary::CreateSession(const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session)
 {
   if (!function_pointers_.CreateSession) {
     throw nidevice_grpc::LibraryLoadException("Could not find nxCreateSession.");
@@ -48,7 +48,7 @@ nxSessionRef_t NiXnetLibrary::CreateSession(const char* databaseName, const char
 #endif
 }
 
-nxSessionRef_t NiXnetLibrary::Clear(nxSessionRef_t session)
+nxStatus_t NiXnetLibrary::Clear(nxSessionRef_t session)
 {
   if (!function_pointers_.Clear) {
     throw nidevice_grpc::LibraryLoadException("Could not find nxClear.");

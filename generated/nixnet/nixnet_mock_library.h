@@ -17,8 +17,8 @@ namespace unit {
 
 class NiXnetMockLibrary : public nixnet_grpc::NiXnetLibraryInterface {
  public:
-  MOCK_METHOD(nxSessionRef_t, CreateSession, (const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session), (override));
-  MOCK_METHOD(nxSessionRef_t, Clear, (nxSessionRef_t session), (override));
+  MOCK_METHOD(nxStatus_t, CreateSession, (const char* databaseName, const char* clusterName, const char* list, const char* interfaceParameter, u32 mode, nxSessionRef_t* session), (override));
+  MOCK_METHOD(nxStatus_t, Clear, (nxSessionRef_t session), (override));
 };
 
 }  // namespace unit
