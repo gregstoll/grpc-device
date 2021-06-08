@@ -5,6 +5,8 @@ import session_pb2 as session_types
 import session_pb2_grpc as grpc_session
 from unittest import TestCase, main
 
+# python -m grpc_tools.protoc -IC:\dev\grpc-device\generated\nifpga\ -IC:\dev\grpc-device\source\protobuf\ --plugin=protoc-gen-mypy=.venv\Scripts\protoc_gen_mypy.bat --python_out=. --grpc_python_out=. --mypy_out=. C:\dev\grpc-device\generated\nifpga\nifpga.proto
+
 server_address = '10.2.66.12'
 server_port = '31763'
 session_name = 'fpga'
@@ -13,6 +15,7 @@ channel = grpc.insecure_channel(f"{server_address}:{server_port}")
 client = grpc_nifpga.NiFpgaStub(channel)
 session = grpc_session.SessionUtilitiesStub(channel)
 session.ResetServer(session_types.ResetServerRequest())
+
 
 class FpgaTest(TestCase):
     def testOpen(self):
@@ -28,6 +31,7 @@ class FpgaTest(TestCase):
         ))
 
         self.assertEqual(0, create_response.status)
+
 
 if __name__ == '__main__':
     main()
