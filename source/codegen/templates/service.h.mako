@@ -15,7 +15,7 @@ namespace_prefix = config["namespace_component"] + "_grpc::"
 if len(config["custom_types"]) > 0:
   custom_types = config["custom_types"]
 resource_handle_type = config.get("resource_handle_type", "ViSession")
-session_repository_type = f"nidevice_grpc::ResourceRepository<{resource_handle_type}>"
+session_repository_type = "nidevice_grpc::ResourceRepository<{}>".format(resource_handle_type)
 %>\
 
 //---------------------------------------------------------------------

@@ -76,9 +76,9 @@ def python_to_c(enum):
 
 def format_value(value):
     if isinstance(value, str):
-        value = f"\"{value}\""
+        value = "\"{}\"".format(value)
     if isinstance(value, float):
-        value = f"{value}f"
+        value = "{}f".format(value)
     return value
 
 

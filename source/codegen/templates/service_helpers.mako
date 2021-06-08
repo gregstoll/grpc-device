@@ -10,7 +10,7 @@
   output_parameters = [p for p in parameters if common_helpers.is_output_parameter(p)]
   session_output_param = next((parameter for parameter in output_parameters if parameter['type'] == 'ViSession' or parameter['grpc_type'] == 'nidevice_grpc.Session'), None)
   session_output_var_name = common_helpers.camel_to_snake(session_output_param['cppName'])
-  close_function_call = function_data['custom_close'] if 'custom_close' in function_data else f"{config['close_function']}(id)"
+  close_function_call = function_data['custom_close'] if 'custom_close' in function_data else "{}(id)".format(config['close_function'])
 %>\
 ${initialize_input_params(function_name, parameters)}
       auto init_lambda = [&] () {
