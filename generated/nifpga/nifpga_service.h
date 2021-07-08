@@ -13,7 +13,7 @@
 #include <grpcpp/health_check_service_interface.h>
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <map>
-#include <server/session_repository.h>
+#include <server/session_resource_repository.h>
 #include <server/shared_library.h>
 
 #include "nifpga_library_interface.h"
@@ -22,13 +22,16 @@ namespace nifpga_grpc {
 
 class NiFpgaService final : public NiFpga::Service {
 public:
-  NiFpgaService(NiFpgaLibraryInterface* library, nidevice_grpc::SessionRepository* session_repository);
+  using ResourceRepositorySharedPtr = std::shared_ptr<nidevice_grpc::SessionResourceRepository<NiFpga_Session>>;
+
+  NiFpgaService(NiFpgaLibraryInterface* library, ResourceRepositorySharedPtr session_repository);
   virtual ~NiFpgaService();
+  
   ::grpc::Status Open(::grpc::ServerContext* context, const OpenRequest* request, OpenResponse* response) override;
   ::grpc::Status Close(::grpc::ServerContext* context, const CloseRequest* request, CloseResponse* response) override;
 private:
   NiFpgaLibraryInterface* library_;
-  nidevice_grpc::ResourceRepository<NiFpga_Session> session_repository_;
+  ResourceRepositorySharedPtr session_repository_;
 };
 
 } // namespace nifpga_grpc

@@ -89,7 +89,7 @@ try :
     configure_measure_when = client.SetAttributeViInt32(nidcpower_types.SetAttributeViInt32Request(
         vi = vi,
         attribute_id = nidcpower_types.NiDCPowerAttributes.NIDCPOWER_ATTRIBUTE_MEASURE_WHEN,
-        attribute_value = nidcpower_types.MeasureWhen.MEASURE_WHEN_NIDCPOWER_VAL_AUTOMATICALLY_AFTER_SOURCE_COMPLETE
+        attribute_value = nidcpower_types.NiDCPowerInt32AttributeValues.NIDCPOWER_INT32_MEASURE_WHEN_VAL_AUTOMATICALLY_AFTER_SOURCE_COMPLETE
     ))
     CheckForError(vi, configure_measure_when.status)
 
@@ -196,7 +196,7 @@ try :
 except grpc.RpcError as rpc_error:
     error_message = rpc_error.details()
     if rpc_error.code() == grpc.StatusCode.UNAVAILABLE :
-        error_message = f"Failed to connect to server on {server_address}"
+        error_message = f"Failed to connect to server on {server_address}:{server_port}"
     elif rpc_error.code() == grpc.StatusCode.UNIMPLEMENTED:
         error_message = "The operation is not implemented or is not supported/enabled in this service"
     print(f"{error_message}")

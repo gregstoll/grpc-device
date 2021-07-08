@@ -13,7 +13,7 @@
 #include <grpcpp/health_check_service_interface.h>
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <map>
-#include <server/session_repository.h>
+#include <server/session_resource_repository.h>
 #include <server/shared_library.h>
 
 #include "nidaqmx_library_interface.h"
@@ -22,8 +22,11 @@ namespace nidaqmx_grpc {
 
 class NiDAQmxService final : public NiDAQmx::Service {
 public:
-  NiDAQmxService(NiDAQmxLibraryInterface* library, nidevice_grpc::SessionRepository* session_repository);
+  using ResourceRepositorySharedPtr = std::shared_ptr<nidevice_grpc::SessionResourceRepository<TaskHandle>>;
+
+  NiDAQmxService(NiDAQmxLibraryInterface* library, ResourceRepositorySharedPtr session_repository);
   virtual ~NiDAQmxService();
+  
   ::grpc::Status CreateTask(::grpc::ServerContext* context, const CreateTaskRequest* request, CreateTaskResponse* response) override;
   ::grpc::Status ClearTask(::grpc::ServerContext* context, const ClearTaskRequest* request, ClearTaskResponse* response) override;
   ::grpc::Status StartTask(::grpc::ServerContext* context, const StartTaskRequest* request, StartTaskResponse* response) override;
@@ -80,7 +83,7 @@ public:
   ::grpc::Status CfgSampClkTiming(::grpc::ServerContext* context, const CfgSampClkTimingRequest* request, CfgSampClkTimingResponse* response) override;
 private:
   NiDAQmxLibraryInterface* library_;
-  nidevice_grpc::ResourceRepository<TaskHandle> session_repository_;
+  ResourceRepositorySharedPtr session_repository_;
 };
 
 } // namespace nidaqmx_grpc

@@ -17,8 +17,10 @@ class NiDmmDriverApiTest : public ::testing::Test {
   {
     ::grpc::ServerBuilder builder;
     session_repository_ = std::make_unique<nidevice_grpc::SessionRepository>();
+    using ResourceRepository = nidevice_grpc::SessionResourceRepository<ViSession>;
+    auto resource_repository = std::make_shared<ResourceRepository>(session_repository_.get());
     nidmm_library_ = std::make_unique<dmm::NiDmmLibrary>();
-    nidmm_service_ = std::make_unique<dmm::NiDmmService>(nidmm_library_.get(), session_repository_.get());
+    nidmm_service_ = std::make_unique<dmm::NiDmmService>(nidmm_library_.get(), resource_repository);
     builder.RegisterService(nidmm_service_.get());
 
     server_ = builder.BuildAndStart();
@@ -251,7 +253,7 @@ TEST_F(NiDmmDriverApiTest, SetViReal64Attribute_GetViReal64Attribute_ValueMatche
   request.mutable_vi()->set_id(GetSessionId());
   request.set_channel_name(channel_name);
   request.set_attribute_id(attribute_to_set);
-  request.set_attribute_value(expected_value);
+  request.set_attribute_value_raw(expected_value);
   dmm::SetAttributeViReal64Response response;
   ::grpc::Status status = GetStub()->SetAttributeViReal64(&context, request, &response);
   ViReal64 get_attribute_value = get_real64_attribute(channel_name, attribute_to_set);
@@ -271,7 +273,7 @@ TEST_F(NiDmmDriverApiTest, SetViInt32Attribute_GetViInt32Attribute_ValueMatchesS
   request.mutable_vi()->set_id(GetSessionId());
   request.set_channel_name(channel_name);
   request.set_attribute_id(attribute_to_set);
-  request.set_attribute_value(expected_value);
+  request.set_attribute_value_raw(expected_value);
   dmm::SetAttributeViInt32Response response;
   ::grpc::Status status = GetStub()->SetAttributeViInt32(&context, request, &response);
   ViInt32 get_attribute_value = get_int32_attribute(channel_name, attribute_to_set);

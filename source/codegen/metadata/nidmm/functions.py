@@ -26,155 +26,6 @@ functions = {
         ],
         'returns': 'ViStatus'
     },
-    "CalAdjustGain": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "mode",
-                "direction": "in",
-                "type": "ViInt32"
-            },
-            {
-                "name": "range",
-                "direction": "in",
-                "type": "ViReal64"
-            },
-            {
-                "name": "inputResistance",
-                "direction": "in",
-                "type": "ViReal64"
-            },
-            {
-                "name": "expectedValue",
-                "direction": "in",
-                "type": "ViReal64"
-            }
-        ],
-        "returns": "ViStatus"
-    },
-    "CalAdjustACFilter": {
-
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "mode",
-                "direction": "in",
-                "type": "ViInt32"
-            },
-            {
-                "name": "range",
-                "direction": "in",
-                "type": "ViReal64"
-            },
-            {
-                "name": "frequency",
-                "direction": "in",
-                "type": "ViReal64"
-            },
-            {
-                "name": "expectedValue",
-                "direction": "in",
-                "type": "ViReal64"
-            }
-        ],
-        "returns": "ViStatus"
-    },
-    "CalAdjustLC": {
-
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "type",
-                "direction": "in",
-                "enum": "LcCalibration",
-                "type": "ViInt32"
-            }
-        ],
-        "returns": "ViStatus"
-    },
-    "CalAdjustLinearization": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "function",
-                "direction": "in",
-                "type": "ViInt32"
-            },
-            {
-                "name": "range",
-                "direction": "in",
-                "type": "ViReal64"
-            },
-            {
-                "name": "inputResistance",
-                "direction": "in",
-                "type": "ViReal64"
-            },
-            {
-                "name": "expectedValue",
-                "direction": "in",
-                "type": "ViReal64"
-            }
-        ],
-        "returns": "ViStatus"
-    },
-    "CalAdjustMisc": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "type",
-                "direction": "in",
-                "enum": "MiscCalibration",
-                "type": "ViInt32"
-            }
-        ],
-        "returns": "ViStatus"
-    },
-    "CalAdjustOffset": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "mode",
-                "direction": "in",
-                "type": "ViInt32"
-            },
-            {
-                "name": "range",
-                "direction": "in",
-                "type": "ViReal64"
-            },
-            {
-                "name": "inputResistance",
-                "direction": "in",
-                "type": "ViReal64"
-            }
-        ],
-        "returns": "ViStatus"
-    },
     "CheckAttributeViBoolean": {
         "parameters": [
             {
@@ -330,23 +181,6 @@ functions = {
             }
         ],
         'returns': 'ViStatus',
-    },
-    "CloseExtCal": {
-        "custom_close_method": True,
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "action",
-                "direction": "in",
-                "enum": "CalibrationCloseAction",
-                "type": "ViInt32"
-            }
-        ],
-        "returns": "ViStatus"
     },
     "ConfigureACBandwidth": {
         "parameters": [
@@ -1180,27 +1014,6 @@ functions = {
         ],
         "returns": "ViStatus"
     },
-    "GetCalCount": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "calType",
-                "direction": "in",
-                "enum": "CalibrationType",
-                "type": "ViInt32"
-            },
-            {
-                "name": "count",
-                "direction": "out",
-                "type": "ViInt32"
-            }
-        ],
-        "returns": "ViStatus"
-    },
     'GetCalDateAndTime': {
         'parameters': [
             {
@@ -1241,45 +1054,6 @@ functions = {
             }
         ],
         'returns': 'ViStatus'
-    },
-    "GetCalUserDefinedInfo": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "bufferSize",
-                "direction": "in",
-                "type": "ViInt32"
-            },
-            {
-                "name": "info",
-                "direction": "out",
-                "type": "ViChar[]",
-                "size": {
-                    "mechanism": "fixed",
-                    "value": 256
-                }
-            }
-        ],
-        "returns": "ViStatus"
-    },
-    "GetCalUserDefinedInfoMaxSize": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "infoSize",
-                "direction": "out",
-                "type": "ViInt32"
-            }
-        ],
-        "returns": "ViStatus"
     },
     "GetChannelName": {
         "codegen_method": "public",
@@ -1616,28 +1390,6 @@ functions = {
         ],
         'returns': 'ViStatus'
     },
-    "InitExtCal": {
-        "init_method": True,
-        "custom_close": "CloseExtCal(id, NIDMM_EXTCAL_ACTION_ABORT)",
-        "parameters": [
-            {
-                "name": "resourceName",
-                "direction": "in",
-                "type": "ViRsrc"
-            },
-            {
-                "name": "calibrationPassword",
-                "direction": "in",
-                "type": "ViString"
-            },
-            {
-                "name": "vi",
-                "direction": "out",
-                "type": "ViSession"
-            }
-        ],
-        "returns": "ViStatus"
-    },
     "InvalidateAllAttributes": {
         "parameters": [
             {
@@ -1889,16 +1641,6 @@ functions = {
         ],
         'returns': 'ViStatus'
     },
-    "RestoreLastExtCalConstants": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            }
-        ],
-        "returns": "ViStatus"
-    },
     "RevisionQuery": {
         "cname": "niDMM_revision_query",
         "parameters": [
@@ -2097,42 +1839,6 @@ functions = {
             }
         ],
         'returns': 'ViStatus'
-    },
-    "SetCalPassword": {
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "oldPassword",
-                "direction": "in",
-                "type": "ViString"
-            },
-            {
-                "name": "newPassword",
-                "direction": "in",
-                "type": "ViString"
-            }
-        ],
-        "returns": "ViStatus"
-    },
-    "SetCalUserDefinedInfo": {
-
-        "parameters": [
-            {
-                "name": "vi",
-                "direction": "in",
-                "type": "ViSession"
-            },
-            {
-                "name": "info",
-                "direction": "in",
-                "type": "ViString"
-            }
-        ],
-        "returns": "ViStatus"
     },
     'UnlockSession': {
         'parameters': [

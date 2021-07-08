@@ -14,7 +14,7 @@
 
 namespace nixnet_grpc {
 
-  NiXnetService::NiXnetService(NiXnetLibraryInterface* library, nidevice_grpc::SessionRepository* session_repository)
+  NiXnetService::NiXnetService(NiXnetLibraryInterface* library, ResourceRepositorySharedPtr session_repository)
       : library_(library), session_repository_(session_repository)
   {
   }
@@ -43,9 +43,9 @@ namespace nixnet_grpc {
         return std::make_tuple(status, session);
       };
       uint32_t session_id = 0;
-      const std::string& session_name = request->session_name();
+      const std::string& grpc_device_session_name = request->session_name();
       auto cleanup_lambda = [&] (nxSessionRef_t id) { library_->Clear (id); };
-      int status = session_repository_.add_session(session_name, init_lambda, cleanup_lambda, session_id);
+      int status = session_repository_->add_session(grpc_device_session_name, init_lambda, cleanup_lambda, session_id);
       response->set_status(status);
       if (status == 0) {
         response->mutable_session()->set_id(session_id);
@@ -66,7 +66,7 @@ namespace nixnet_grpc {
     }
     try {
       auto session_grpc_session = request->session();
-      auto session = session_repository_.access_session(session_grpc_session.id(), session_grpc_session.name());
+      auto session = session_repository_->access_session(session_grpc_session.id(), session_grpc_session.name());
       auto status = library_->Clear(session);
       response->set_status(status);
       return ::grpc::Status::OK;

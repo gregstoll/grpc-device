@@ -15,7 +15,7 @@ class SessionRepository {
  public:
   SessionRepository();
 
-  typedef std::function<std::tuple<int, uint32_t>()> InitFunc;
+  typedef std::function<int32_t()> InitFunc;
   typedef std::function<void(uint32_t)> CleanupSessionFunc;
 
   int add_session(const std::string& session_name, InitFunc init_func, CleanupSessionFunc cleanup_func, uint32_t& session_id);
@@ -126,7 +126,6 @@ class ResourceRepository {
 
   SessionRepository* _session_repository;
 };
-
 }  // namespace nidevice_grpc
 
 #endif  // NIDEVICE_GRPC_SESSION_REPOSITORY

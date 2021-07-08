@@ -7,14 +7,14 @@ config = {
     'java_package': 'com.ni.grpc.nidaqmx',
     'csharp_namespace': 'NationalInstruments.Grpc.NiDAQmx',
     'namespace_component': 'nidaqmx',
-    'close_function': 'ClearTask ',
+    'close_function': 'ClearTask',
     'custom_types': [
     ],
     'driver_name': 'NI-DAQMX',
     'extra_errors_used': [
     ],
     'init_function': 'CreateTask',
-    'resource_handle_type' : 'TaskHandle',
+    'resource_handle_type': 'TaskHandle',
     'library_info': {
         'Linux': {
             '64bit': {

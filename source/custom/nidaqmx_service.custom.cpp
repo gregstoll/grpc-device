@@ -11,7 +11,7 @@ namespace nidaqmx_grpc {
     ReadAnalogF64StreamCustomResponse localResponse;
     auto response = &localResponse;
     auto task_grpc_session = request->task();
-    auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+    auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
     int32 num_samps_per_chan = request->num_samps_per_chan();
     double timeout = request->timeout();
     int32 fill_mode = request->fill_mode();
@@ -47,7 +47,7 @@ namespace nidaqmx_grpc {
     auto request = &local_request;
     while (reader->Read(request)) {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       int32 auto_start = request->auto_start();
       double timeout = request->timeout();
@@ -82,7 +82,7 @@ namespace nidaqmx_grpc {
     auto request = &local_request;
     while (reader->Read(request)) {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       int32 auto_start = request->auto_start();
       double timeout = request->timeout();
@@ -111,7 +111,7 @@ namespace nidaqmx_grpc {
   }
   try {
     auto task_grpc_session = request->task();
-    auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+    auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
     int32 num_samps_per_chan = request->num_samps_per_chan();
     double timeout = request->timeout();
     int32 fill_mode = request->fill_mode();
@@ -142,7 +142,7 @@ namespace nidaqmx_grpc {
     ReadDigitalU16StreamResponse localResponse;
     auto response = &localResponse;
     auto task_grpc_session = request->task();
-    auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+    auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
     int32 num_samps_per_chan = request->num_samps_per_chan();
     double timeout = request->timeout();
     int32 fill_mode = request->fill_mode();
@@ -173,7 +173,7 @@ namespace nidaqmx_grpc {
   }
   try {
     auto task_grpc_session = request->task();
-    auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+    auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
     int32 num_samps_per_chan = request->num_samps_per_chan();
     int32 auto_start = request->auto_start();
     double timeout = request->timeout();
@@ -204,7 +204,7 @@ namespace nidaqmx_grpc {
     auto request = &local_request;
     while (reader->Read(request)) {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       int32 auto_start = request->auto_start();
       double timeout = request->timeout();

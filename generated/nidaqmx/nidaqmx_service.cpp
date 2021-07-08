@@ -14,7 +14,7 @@
 
 namespace nidaqmx_grpc {
 
-  NiDAQmxService::NiDAQmxService(NiDAQmxLibraryInterface* library, nidevice_grpc::SessionRepository* session_repository)
+  NiDAQmxService::NiDAQmxService(NiDAQmxLibraryInterface* library, ResourceRepositorySharedPtr session_repository)
       : library_(library), session_repository_(session_repository)
   {
   }
@@ -39,9 +39,9 @@ namespace nidaqmx_grpc {
         return std::make_tuple(status, task);
       };
       uint32_t session_id = 0;
-      const std::string& session_name = request->session_name();
-      auto cleanup_lambda = [&] (TaskHandle id) { library_->ClearTask (id); };
-      int status = session_repository_.add_session(session_name, init_lambda, cleanup_lambda, session_id);
+      const std::string& grpc_device_session_name = request->session_name();
+      auto cleanup_lambda = [&] (TaskHandle id) { library_->ClearTask(id); };
+      int status = session_repository_->add_session(grpc_device_session_name, init_lambda, cleanup_lambda, session_id);
       response->set_status(status);
       if (status == 0) {
         response->mutable_task()->set_id(session_id);
@@ -62,7 +62,8 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
+      session_repository_->remove_session(task);
       auto status = library_->ClearTask(task);
       response->set_status(status);
       return ::grpc::Status::OK;
@@ -81,7 +82,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       auto status = library_->StartTask(task);
       response->set_status(status);
       return ::grpc::Status::OK;
@@ -100,7 +101,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       auto status = library_->StopTask(task);
       response->set_status(status);
       return ::grpc::Status::OK;
@@ -119,7 +120,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 signal_id = request->signal_id();
       const char* output_terminal = request->output_terminal().c_str();
       auto status = library_->ExportSignal(task, signal_id, output_terminal);
@@ -204,7 +205,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* trigger_source = request->trigger_source().c_str();
       int32 trigger_edge = request->trigger_edge();
       auto status = library_->CfgDigEdgeStartTrig(task, trigger_source, trigger_edge);
@@ -225,7 +226,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* counter = request->counter().c_str();
       const char* name_to_assign_to_channel = request->name_to_assign_to_channel().c_str();
       double min_val = request->min_val();
@@ -249,7 +250,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       double timeout = request->timeout();
       int32 interleaved = request->interleaved();
@@ -284,7 +285,7 @@ namespace nidaqmx_grpc {
       ReadCtrFreqStreamResponse localResponse;
       auto response = &localResponse;
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       double timeout = request->timeout();
       int32 interleaved = request->interleaved();
@@ -319,7 +320,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* physical_channel = request->physical_channel().c_str();
       const char* name_to_assign_to_channel = request->name_to_assign_to_channel().c_str();
       int32 terminal_config = request->terminal_config();
@@ -345,7 +346,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* physical_channel = request->physical_channel().c_str();
       const char* name_to_assign_to_channel = request->name_to_assign_to_channel().c_str();
       double min_val = request->min_val();
@@ -370,7 +371,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* lines = request->lines().c_str();
       const char* name_to_assign_to_lines = request->name_to_assign_to_lines().c_str();
       int32 line_grouping = request->line_grouping();
@@ -392,7 +393,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* lines = request->lines().c_str();
       const char* name_to_assign_to_lines = request->name_to_assign_to_lines().c_str();
       int32 line_grouping = request->line_grouping();
@@ -414,19 +415,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetChanAttributeUInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetChanAttributeUInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetChanAttributeUInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetChanAttributeUInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetChanAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetChanAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       uInt32 value {};
@@ -451,19 +455,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetChanAttributeUInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetChanAttributeUInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetChanAttributeUInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetChanAttributeUInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetChanAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetChanAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       uInt32 value = request->value();
@@ -485,19 +492,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetChanAttributeInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetChanAttributeInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetChanAttributeInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetChanAttributeInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetChanAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetChanAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 value {};
@@ -522,19 +532,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetChanAttributeInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetChanAttributeInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetChanAttributeInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetChanAttributeInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetChanAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetChanAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 value = request->value();
@@ -556,19 +569,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetChanAttributeDoubleRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetChanAttributeDoubleRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetChanAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetChanAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetChanAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetChanAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       double value {};
@@ -593,19 +609,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetChanAttributeDoubleRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetChanAttributeDoubleRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetChanAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetChanAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetChanAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetChanAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       double value = request->value();
@@ -627,19 +646,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetChanAttributeStringRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetChanAttributeStringRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetChanAttributeStringRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetChanAttributeStringRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetChanAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetChanAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 size = request->size();
@@ -668,19 +690,22 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* channel = request->channel().c_str();
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetChanAttributeStringRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetChanAttributeStringRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetChanAttributeStringRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetChanAttributeStringRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetChanAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetChanAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       const char* value = request->value().c_str();
@@ -702,18 +727,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetTimingAttributeUInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetTimingAttributeUInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetTimingAttributeUInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetTimingAttributeUInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetTimingAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetTimingAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       uInt32 value {};
@@ -738,18 +766,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetTimingAttributeUInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetTimingAttributeUInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetTimingAttributeUInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetTimingAttributeUInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetTimingAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetTimingAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       uInt32 value = request->value();
@@ -771,18 +802,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetTimingAttributeInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetTimingAttributeInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetTimingAttributeInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetTimingAttributeInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetTimingAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetTimingAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 value {};
@@ -807,18 +841,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetTimingAttributeInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetTimingAttributeInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetTimingAttributeInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetTimingAttributeInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetTimingAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetTimingAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 value = request->value();
@@ -840,18 +877,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetTimingAttributeDoubleRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetTimingAttributeDoubleRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetTimingAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetTimingAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetTimingAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetTimingAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       double value {};
@@ -876,18 +916,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetTimingAttributeDoubleRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetTimingAttributeDoubleRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetTimingAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetTimingAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetTimingAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetTimingAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       double value = request->value();
@@ -909,18 +952,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetTimingAttributeStringRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetTimingAttributeStringRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetTimingAttributeStringRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetTimingAttributeStringRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetTimingAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetTimingAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 size = request->size();
@@ -949,18 +995,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetTimingAttributeStringRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetTimingAttributeStringRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetTimingAttributeStringRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetTimingAttributeStringRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetTimingAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetTimingAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       const char* value = request->value().c_str();
@@ -982,18 +1031,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       uInt32 value {};
@@ -1018,18 +1070,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeUInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeUInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       uInt32 value = request->value();
@@ -1051,18 +1106,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetRealTimeAttributeInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetRealTimeAttributeInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 value {};
@@ -1087,18 +1145,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetRealTimeAttributeInt32Request::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetRealTimeAttributeInt32Request::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeInt32Request::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeInt32Request::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeInt32Request::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 value = request->value();
@@ -1120,18 +1181,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       double value {};
@@ -1156,18 +1220,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeDoubleRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeDoubleRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       double value = request->value();
@@ -1189,18 +1256,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::GetRealTimeAttributeStringRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::GetRealTimeAttributeStringRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeStringRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeStringRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::GetRealTimeAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::GetRealTimeAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       int32 size = request->size();
@@ -1229,18 +1299,21 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 attribute;
       switch (request->attribute_enum_case()) {
-        case nidaqmx_grpc::SetRealTimeAttributeStringRequest::AttributeEnumCase::kAttribute:
-          attribute = (int32)request->attribute();
+        case nidaqmx_grpc::SetRealTimeAttributeStringRequest::AttributeEnumCase::kAttribute: {
+          attribute = static_cast<int32>(request->attribute());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeStringRequest::AttributeEnumCase::kAttributeRaw:
-          attribute = (int32)request->attribute_raw();
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeStringRequest::AttributeEnumCase::kAttributeRaw: {
+          attribute = static_cast<int32>(request->attribute_raw());
           break;
-        case nidaqmx_grpc::SetRealTimeAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET:
+        }
+        case nidaqmx_grpc::SetRealTimeAttributeStringRequest::AttributeEnumCase::ATTRIBUTE_ENUM_NOT_SET: {
           return ::grpc::Status(::grpc::INVALID_ARGUMENT, "The value for attribute was not specified or out of range");
           break;
+        }
       }
 
       const char* value = request->value().c_str();
@@ -1262,7 +1335,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
@@ -1295,7 +1368,7 @@ namespace nidaqmx_grpc {
       ReadDigitalU32StreamResponse localResponse;
       auto response = &localResponse;
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
@@ -1328,7 +1401,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       int32 auto_start = request->auto_start();
       double timeout = request->timeout();
@@ -1358,7 +1431,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
@@ -1391,7 +1464,7 @@ namespace nidaqmx_grpc {
       ReadAnalogF64StreamCodegenResponse localResponse;
       auto response = &localResponse;
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       double timeout = request->timeout();
       int32 fill_mode = request->fill_mode();
@@ -1424,7 +1497,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       int32 num_samps_per_chan = request->num_samps_per_chan();
       int32 auto_start = request->auto_start();
       double timeout = request->timeout();
@@ -1454,7 +1527,7 @@ namespace nidaqmx_grpc {
     }
     try {
       auto task_grpc_session = request->task();
-      auto task = session_repository_.access_session(task_grpc_session.id(), task_grpc_session.name());
+      auto task = session_repository_->access_session(task_grpc_session.id(), task_grpc_session.name());
       const char* source = request->source().c_str();
       double rate = request->rate();
       int32 active_edge = request->active_edge();

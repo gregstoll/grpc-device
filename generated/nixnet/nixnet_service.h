@@ -13,7 +13,7 @@
 #include <grpcpp/health_check_service_interface.h>
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <map>
-#include <server/session_repository.h>
+#include <server/session_resource_repository.h>
 #include <server/shared_library.h>
 
 #include "nixnet_library_interface.h"
@@ -22,13 +22,16 @@ namespace nixnet_grpc {
 
 class NiXnetService final : public NiXnet::Service {
 public:
-  NiXnetService(NiXnetLibraryInterface* library, nidevice_grpc::SessionRepository* session_repository);
+  using ResourceRepositorySharedPtr = std::shared_ptr<nidevice_grpc::SessionResourceRepository<nxSessionRef_t>>;
+
+  NiXnetService(NiXnetLibraryInterface* library, ResourceRepositorySharedPtr session_repository);
   virtual ~NiXnetService();
+  
   ::grpc::Status CreateSession(::grpc::ServerContext* context, const CreateSessionRequest* request, CreateSessionResponse* response) override;
   ::grpc::Status Clear(::grpc::ServerContext* context, const ClearRequest* request, ClearResponse* response) override;
 private:
   NiXnetLibraryInterface* library_;
-  nidevice_grpc::ResourceRepository<nxSessionRef_t> session_repository_;
+  ResourceRepositorySharedPtr session_repository_;
 };
 
 } // namespace nixnet_grpc
