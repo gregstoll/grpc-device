@@ -254,7 +254,7 @@ def add_enum(enum_name, enum_values, enums, enum_value_prefix, is_mapped=False):
     values = [{"name": name, "value": enum_values[name]} for name in enum_values]
     new_enum = {
         'enum-value-prefix': enum_value_prefix,
-        'allow-alias': allow_alias,
+        'allow-alias': allow_alias and not is_mapped,
         'generate-mappings': is_mapped,
         'values': values
     }
