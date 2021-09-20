@@ -392,13 +392,20 @@ configure_deembedding_table_interpolation_spline(const StubPtr& stub, const nide
 }
 
 ConfigureDigitalEdgeConfigurationListStepTriggerResponse
-configure_digital_edge_configuration_list_step_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& source, const simple_variant<AttrDigitalEdgeEdgeRangeTable, pb::int32>& edge)
+configure_digital_edge_configuration_list_step_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<DigitalEdgeConfigurationListStepTriggerSource, std::string>& source, const simple_variant<AttrDigitalEdgeEdgeRangeTable, pb::int32>& edge)
 {
   ::grpc::ClientContext context;
 
   auto request = ConfigureDigitalEdgeConfigurationListStepTriggerRequest{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_source(source);
+  const auto source_ptr = source.get_if<DigitalEdgeConfigurationListStepTriggerSource>();
+  const auto source_raw_ptr = source.get_if<std::string>();
+  if (source_ptr) {
+    request.set_source_mapped(*source_ptr);
+  }
+  else if (source_raw_ptr) {
+    request.set_source_raw(*source_raw_ptr);
+  }
   const auto edge_ptr = edge.get_if<AttrDigitalEdgeEdgeRangeTable>();
   const auto edge_raw_ptr = edge.get_if<pb::int32>();
   if (edge_ptr) {
@@ -417,14 +424,28 @@ configure_digital_edge_configuration_list_step_trigger(const StubPtr& stub, cons
 }
 
 ConfigureDigitalEdgeScriptTriggerResponse
-configure_digital_edge_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& trigger_id, const pb::string& source, const simple_variant<AttrDigitalEdgeEdgeRangeTable, pb::int32>& edge)
+configure_digital_edge_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<DigitalEdgeScriptTriggerIdentifier, std::string>& trigger_id, const simple_variant<AttrTriggerSourceRangeTable, std::string>& source, const simple_variant<AttrDigitalEdgeEdgeRangeTable, pb::int32>& edge)
 {
   ::grpc::ClientContext context;
 
   auto request = ConfigureDigitalEdgeScriptTriggerRequest{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_trigger_id(trigger_id);
-  request.set_source(source);
+  const auto trigger_id_ptr = trigger_id.get_if<DigitalEdgeScriptTriggerIdentifier>();
+  const auto trigger_id_raw_ptr = trigger_id.get_if<std::string>();
+  if (trigger_id_ptr) {
+    request.set_trigger_id_mapped(*trigger_id_ptr);
+  }
+  else if (trigger_id_raw_ptr) {
+    request.set_trigger_id_raw(*trigger_id_raw_ptr);
+  }
+  const auto source_ptr = source.get_if<AttrTriggerSourceRangeTable>();
+  const auto source_raw_ptr = source.get_if<std::string>();
+  if (source_ptr) {
+    request.set_source_mapped(*source_ptr);
+  }
+  else if (source_raw_ptr) {
+    request.set_source_raw(*source_raw_ptr);
+  }
   const auto edge_ptr = edge.get_if<AttrDigitalEdgeEdgeRangeTable>();
   const auto edge_raw_ptr = edge.get_if<pb::int32>();
   if (edge_ptr) {
@@ -443,13 +464,20 @@ configure_digital_edge_script_trigger(const StubPtr& stub, const nidevice_grpc::
 }
 
 ConfigureDigitalEdgeStartTriggerResponse
-configure_digital_edge_start_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& source, const simple_variant<AttrDigitalEdgeEdgeRangeTable, pb::int32>& edge)
+configure_digital_edge_start_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<AttrTriggerSourceRangeTable, std::string>& source, const simple_variant<AttrDigitalEdgeEdgeRangeTable, pb::int32>& edge)
 {
   ::grpc::ClientContext context;
 
   auto request = ConfigureDigitalEdgeStartTriggerRequest{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_source(source);
+  const auto source_ptr = source.get_if<AttrTriggerSourceRangeTable>();
+  const auto source_raw_ptr = source.get_if<std::string>();
+  if (source_ptr) {
+    request.set_source_mapped(*source_ptr);
+  }
+  else if (source_raw_ptr) {
+    request.set_source_raw(*source_raw_ptr);
+  }
   const auto edge_ptr = edge.get_if<AttrDigitalEdgeEdgeRangeTable>();
   const auto edge_raw_ptr = edge.get_if<pb::int32>();
   if (edge_ptr) {
@@ -468,14 +496,28 @@ configure_digital_edge_start_trigger(const StubPtr& stub, const nidevice_grpc::S
 }
 
 ConfigureDigitalLevelScriptTriggerResponse
-configure_digital_level_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& trigger_id, const pb::string& source, const simple_variant<AttrDigitalLevelActiveLevelRangeTable, pb::int32>& level)
+configure_digital_level_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<DigitalEdgeScriptTriggerIdentifier, std::string>& trigger_id, const simple_variant<AttrTriggerSourceRangeTable, std::string>& source, const simple_variant<AttrDigitalLevelActiveLevelRangeTable, pb::int32>& level)
 {
   ::grpc::ClientContext context;
 
   auto request = ConfigureDigitalLevelScriptTriggerRequest{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_trigger_id(trigger_id);
-  request.set_source(source);
+  const auto trigger_id_ptr = trigger_id.get_if<DigitalEdgeScriptTriggerIdentifier>();
+  const auto trigger_id_raw_ptr = trigger_id.get_if<std::string>();
+  if (trigger_id_ptr) {
+    request.set_trigger_id_mapped(*trigger_id_ptr);
+  }
+  else if (trigger_id_raw_ptr) {
+    request.set_trigger_id_raw(*trigger_id_raw_ptr);
+  }
+  const auto source_ptr = source.get_if<AttrTriggerSourceRangeTable>();
+  const auto source_raw_ptr = source.get_if<std::string>();
+  if (source_ptr) {
+    request.set_source_mapped(*source_ptr);
+  }
+  else if (source_raw_ptr) {
+    request.set_source_raw(*source_raw_ptr);
+  }
   const auto level_ptr = level.get_if<AttrDigitalLevelActiveLevelRangeTable>();
   const auto level_raw_ptr = level.get_if<pb::int32>();
   if (level_ptr) {
@@ -569,13 +611,20 @@ configure_p2p_endpoint_fullness_start_trigger(const StubPtr& stub, const nidevic
 }
 
 ConfigurePXIChassisClk10Response
-configure_pxi_chassis_clk10(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& pxi_clk10_source)
+configure_pxi_chassis_clk10(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<AttrPXIChassisClk10RangeTable, std::string>& pxi_clk10_source)
 {
   ::grpc::ClientContext context;
 
   auto request = ConfigurePXIChassisClk10Request{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_pxi_clk10_source(pxi_clk10_source);
+  const auto pxi_clk10_source_ptr = pxi_clk10_source.get_if<AttrPXIChassisClk10RangeTable>();
+  const auto pxi_clk10_source_raw_ptr = pxi_clk10_source.get_if<std::string>();
+  if (pxi_clk10_source_ptr) {
+    request.set_pxi_clk10_source_mapped(*pxi_clk10_source_ptr);
+  }
+  else if (pxi_clk10_source_raw_ptr) {
+    request.set_pxi_clk10_source_raw(*pxi_clk10_source_raw_ptr);
+  }
 
   auto response = ConfigurePXIChassisClk10Response{};
 
@@ -628,13 +677,20 @@ configure_rf(const StubPtr& stub, const nidevice_grpc::Session& vi, const double
 }
 
 ConfigureRefClockResponse
-configure_ref_clock(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& ref_clock_source, const double& ref_clock_rate)
+configure_ref_clock(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<AttrRefClockSourceRangeTable, std::string>& ref_clock_source, const double& ref_clock_rate)
 {
   ::grpc::ClientContext context;
 
   auto request = ConfigureRefClockRequest{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_ref_clock_source(ref_clock_source);
+  const auto ref_clock_source_ptr = ref_clock_source.get_if<AttrRefClockSourceRangeTable>();
+  const auto ref_clock_source_raw_ptr = ref_clock_source.get_if<std::string>();
+  if (ref_clock_source_ptr) {
+    request.set_ref_clock_source_mapped(*ref_clock_source_ptr);
+  }
+  else if (ref_clock_source_raw_ptr) {
+    request.set_ref_clock_source_raw(*ref_clock_source_raw_ptr);
+  }
   request.set_ref_clock_rate(ref_clock_rate);
 
   auto response = ConfigureRefClockResponse{};
@@ -663,13 +719,20 @@ configure_signal_bandwidth(const StubPtr& stub, const nidevice_grpc::Session& vi
 }
 
 ConfigureSoftwareScriptTriggerResponse
-configure_software_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& trigger_id)
+configure_software_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<DigitalEdgeScriptTriggerIdentifier, std::string>& trigger_id)
 {
   ::grpc::ClientContext context;
 
   auto request = ConfigureSoftwareScriptTriggerRequest{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_trigger_id(trigger_id);
+  const auto trigger_id_ptr = trigger_id.get_if<DigitalEdgeScriptTriggerIdentifier>();
+  const auto trigger_id_raw_ptr = trigger_id.get_if<std::string>();
+  if (trigger_id_ptr) {
+    request.set_trigger_id_mapped(*trigger_id_ptr);
+  }
+  else if (trigger_id_raw_ptr) {
+    request.set_trigger_id_raw(*trigger_id_raw_ptr);
+  }
 
   auto response = ConfigureSoftwareScriptTriggerResponse{};
 
@@ -894,13 +957,20 @@ disable_configuration_list_step_trigger(const StubPtr& stub, const nidevice_grpc
 }
 
 DisableScriptTriggerResponse
-disable_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const pb::string& trigger_id)
+disable_script_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<DigitalEdgeScriptTriggerIdentifier, std::string>& trigger_id)
 {
   ::grpc::ClientContext context;
 
   auto request = DisableScriptTriggerRequest{};
   request.mutable_vi()->CopyFrom(vi);
-  request.set_trigger_id(trigger_id);
+  const auto trigger_id_ptr = trigger_id.get_if<DigitalEdgeScriptTriggerIdentifier>();
+  const auto trigger_id_raw_ptr = trigger_id.get_if<std::string>();
+  if (trigger_id_ptr) {
+    request.set_trigger_id_mapped(*trigger_id_ptr);
+  }
+  else if (trigger_id_raw_ptr) {
+    request.set_trigger_id_raw(*trigger_id_raw_ptr);
+  }
 
   auto response = DisableScriptTriggerResponse{};
 
@@ -960,7 +1030,7 @@ error_query(const StubPtr& stub, const nidevice_grpc::Session& vi)
 }
 
 ExportSignalResponse
-export_signal(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<RoutedSignal, pb::int32>& signal, const pb::string& signal_identifier, const pb::string& output_terminal)
+export_signal(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<RoutedSignal, pb::int32>& signal, const simple_variant<SignalIdentifier, std::string>& signal_identifier, const simple_variant<OutputSignal, std::string>& output_terminal)
 {
   ::grpc::ClientContext context;
 
@@ -974,8 +1044,22 @@ export_signal(const StubPtr& stub, const nidevice_grpc::Session& vi, const simpl
   else if (signal_raw_ptr) {
     request.set_signal_raw(*signal_raw_ptr);
   }
-  request.set_signal_identifier(signal_identifier);
-  request.set_output_terminal(output_terminal);
+  const auto signal_identifier_ptr = signal_identifier.get_if<SignalIdentifier>();
+  const auto signal_identifier_raw_ptr = signal_identifier.get_if<std::string>();
+  if (signal_identifier_ptr) {
+    request.set_signal_identifier_mapped(*signal_identifier_ptr);
+  }
+  else if (signal_identifier_raw_ptr) {
+    request.set_signal_identifier_raw(*signal_identifier_raw_ptr);
+  }
+  const auto output_terminal_ptr = output_terminal.get_if<OutputSignal>();
+  const auto output_terminal_raw_ptr = output_terminal.get_if<std::string>();
+  if (output_terminal_ptr) {
+    request.set_output_terminal_mapped(*output_terminal_ptr);
+  }
+  else if (output_terminal_raw_ptr) {
+    request.set_output_terminal_raw(*output_terminal_raw_ptr);
+  }
 
   auto response = ExportSignalResponse{};
 
@@ -1208,7 +1292,7 @@ get_stream_endpoint_handle(const StubPtr& stub, const nidevice_grpc::Session& vi
 }
 
 GetTerminalNameResponse
-get_terminal_name(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<RoutedSignal, pb::int32>& signal, const pb::string& signal_identifier)
+get_terminal_name(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<RoutedSignal, pb::int32>& signal, const simple_variant<SignalIdentifier, std::string>& signal_identifier)
 {
   ::grpc::ClientContext context;
 
@@ -1222,7 +1306,14 @@ get_terminal_name(const StubPtr& stub, const nidevice_grpc::Session& vi, const s
   else if (signal_raw_ptr) {
     request.set_signal_raw(*signal_raw_ptr);
   }
-  request.set_signal_identifier(signal_identifier);
+  const auto signal_identifier_ptr = signal_identifier.get_if<SignalIdentifier>();
+  const auto signal_identifier_raw_ptr = signal_identifier.get_if<std::string>();
+  if (signal_identifier_ptr) {
+    request.set_signal_identifier_mapped(*signal_identifier_ptr);
+  }
+  else if (signal_identifier_raw_ptr) {
+    request.set_signal_identifier_raw(*signal_identifier_raw_ptr);
+  }
 
   auto response = GetTerminalNameResponse{};
 
@@ -1658,7 +1749,7 @@ self_test(const StubPtr& stub, const nidevice_grpc::Session& vi)
 }
 
 SendSoftwareEdgeTriggerResponse
-send_software_edge_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<RoutedSignal, pb::int32>& trigger, const pb::string& trigger_identifier)
+send_software_edge_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi, const simple_variant<RoutedSignal, pb::int32>& trigger, const simple_variant<SignalIdentifier, std::string>& trigger_identifier)
 {
   ::grpc::ClientContext context;
 
@@ -1672,7 +1763,14 @@ send_software_edge_trigger(const StubPtr& stub, const nidevice_grpc::Session& vi
   else if (trigger_raw_ptr) {
     request.set_trigger_raw(*trigger_raw_ptr);
   }
-  request.set_trigger_identifier(trigger_identifier);
+  const auto trigger_identifier_ptr = trigger_identifier.get_if<SignalIdentifier>();
+  const auto trigger_identifier_raw_ptr = trigger_identifier.get_if<std::string>();
+  if (trigger_identifier_ptr) {
+    request.set_trigger_identifier_mapped(*trigger_identifier_ptr);
+  }
+  else if (trigger_identifier_raw_ptr) {
+    request.set_trigger_identifier_raw(*trigger_identifier_raw_ptr);
+  }
 
   auto response = SendSoftwareEdgeTriggerResponse{};
 
